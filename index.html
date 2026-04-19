@@ -549,7 +549,7 @@
         <div class="modal-info-row"><span class="icon">💰</span> ${item.price || ''}</div>
         ${hoursHtml}
         <div class="modal-info-row"><span class="icon">🏷️</span> ${categories.find(c=>c.name===item.cat)?.emoji || '🍜'} ${item.cat || ''}</div>
-        <button class="book-btn" onclick="window.open('https://open.kakao.com/o/sYtvh9pi', '_blank')">예약 문의하기</button>
+        <button class="book-btn" onclick="window.open('https://pf.kakao.com/_xnxevCX/chat', '_blank')">예약 문의하기</button>
         <hr style="margin:16px 0;"><div style="font-weight:700; margin-bottom:8px;">💬 리뷰 (${reviewsList.length})</div>
         <div id="modalReviews">${reviewsList.map(r => `<div class="review-card"><div class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div><div class="review-text">${r.text}</div><div class="review-date">${r.date}</div>${r.images && r.images.length ? `<div class="review-images">${r.images.map(img => `<img src="${img}" class="review-img" onclick="window.open('${img}','_blank')">`).join('')}</div>` : ''}</div>`).join('') || '리뷰가 없습니다.'}</div>
         <div style="margin-top:16px;"><textarea id="newReviewText" rows="2" placeholder="리뷰 작성..." style="width:100%; padding:8px; border-radius:8px;"></textarea>
