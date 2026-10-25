@@ -1,0 +1,16 @@
+{
+  "name": "플랜메이트 - 상하이 맛집/관광지/호텔",
+  "short_name": "플랜메이트",
+  "description": "상하이 여행을 위한 맛집, 관광지, 호텔 가이드와 여행자 리뷰",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1B2D5B",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
