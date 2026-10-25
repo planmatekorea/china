@@ -230,6 +230,26 @@
       $('saveBtn').classList.add('hidden'); $('againBtn').classList.remove('hidden');
     }).catch(function () { busy = false; $('saveBtn').disabled = false; show($('saveMsg'), 'err', '서버에 연결하지 못했어요. 인터넷을 확인해주세요'); });
   });
+  // ----- 초안 링크: admin.html#d=... 로 열면 입력 칸이 미리 채워집니다 (주소 # 뒤의 내용은 서버로 전송되지 않아요) -----
+  function applyDraft() {
+    var m = /[#&]d=([A-Za-z0-9_\-]+)/.exec(location.hash || '');
+    if (!m) return;
+    try {
+      var b64 = m[1].replace(/-/g, '+').replace(/_/g, '/'); while (b64.length % 4) b64 += '=';
+      var bin = atob(b64), bytes = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      var d = JSON.parse(new TextDecoder('utf-8').decode(bytes));
+      if (!d || typeof d !== 'object') return;
+      if (['rest', 'sight', 'hotel'].indexOf(d.type) >= 0) setType(d.type);
+      ['cat', 'emoji', 'name', 'nameKr', 'address', 'price', 'hours', 'phone', 'desc', 'lat', 'lng'].forEach(function (k) {
+        if (typeof d[k] === 'string' || typeof d[k] === 'number') $(k).value = String(d[k]).slice(0, Number($(k).getAttribute('maxlength')) || 500);
+      });
+      if (['0', '3', '4', '5'].indexOf(String(d.stars)) >= 0) $('stars').value = String(d.stars);
+      try { history.replaceState(null, '', location.pathname); } catch (e) {}
+    } catch (e) { /* 잘못된 초안 링크는 무시 */ }
+  }
+  applyDraft();
+
   $('againBtn').addEventListener('click', function () { resetForm(); hideMsg($('saveMsg')); $('againBtn').classList.add('hidden'); $('saveBtn').classList.remove('hidden'); window.scrollTo(0, 0); });
 })();
 </script>
