@@ -1,0 +1,37 @@
+[
+ {
+  "id": "1776952376529",
+  "placeOldId": "3u2CWISRJDHc7ie96ELn",
+  "rating": 5,
+  "text": "멋진 경치와 고급스러운 호텔, 불가리 케잌과 음료!\n환상적인 경험이었어요.",
+  "images": [
+   "img/legacy-review-1776952376529-1.jpg",
+   "img/legacy-review-1776952376529-2.jpg"
+  ],
+  "date": "2026. 4. 23.",
+  "type": "rest",
+  "note": "연결된 장소가 현재 목록에 없음, 앱에서 제외"
+ },
+ {
+  "id": "bqwZyjLsapJShYZ7OGhu",
+  "placeOldId": "test123",
+  "rating": 5,
+  "text": "테스트 리뷰입니다",
+  "images": [],
+  "date": "2026. 4. 21.",
+  "type": "rest",
+  "note": "테스트 글, 앱에서 제외"
+ },
+ {
+  "id": "1776895259794",
+  "placeOldId": "3u2CWISRJDHc7ie96ELn",
+  "rating": 5,
+  "text": "상해 원탑 야경 맛집! 고급스러운 호텔이에요. 예약이 어려웠는데 플랜메이트 덕분에 편하게 다녀왔어요.",
+  "images": [
+   "img/legacy-review-1776895259794-1.jpg"
+  ],
+  "date": "2026. 4. 23.",
+  "type": "rest",
+  "note": "연결된 장소가 현재 목록에 없음, 앱에서 제외"
+ }
+]

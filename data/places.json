@@ -1,0 +1,322 @@
+{
+ "categories": [
+  {
+   "name": "훠궈",
+   "emoji": "🔥"
+  },
+  {
+   "name": "딤섬",
+   "emoji": "🥟"
+  },
+  {
+   "name": "한식",
+   "emoji": "🇰🇷"
+  },
+  {
+   "name": "양식",
+   "emoji": "🍝"
+  },
+  {
+   "name": "광둥요리",
+   "emoji": "🥘"
+  },
+  {
+   "name": "북경요리",
+   "emoji": "🦆"
+  },
+  {
+   "name": "BAR(루프탑 야경맛집)",
+   "emoji": "🥤"
+  },
+  {
+   "name": "일식",
+   "emoji": "🍣"
+  },
+  {
+   "name": "사천요리",
+   "emoji": "🌶️"
+  },
+  {
+   "name": "꿔바로우(동북탕수육)",
+   "emoji": "🍲"
+  },
+  {
+   "name": "중식",
+   "emoji": "🥢"
+  },
+  {
+   "name": "양꼬치",
+   "emoji": "🐑"
+  },
+  {
+   "name": "카페",
+   "emoji": "☕"
+  }
+ ],
+ "restaurants": [
+  {
+   "image": "img/rest01.jpg",
+   "phone": "021-6361-7188",
+   "desc": "이미 유명한 1번 훠궈집!\n#상하이 #상해 #인민광장 #난징동루 #쿵푸면 #반반가능 #매운맛 #안매운맛 #소스조제",
+   "name": "海底捞(人民广场)",
+   "nameKr": "하이디라오(인민광장)",
+   "address": "上海市黄浦区南京东路830号第一百货B管5楼",
+   "cat": "훠궈",
+   "price": "2.5만 KRW / 人 , 130 RMB / 人",
+   "emoji": "🔥",
+   "hours": "",
+   "id": "rest01",
+   "oldId": "4OW4HDIbMNK11Jw5PCxd"
+  },
+  {
+   "name": "非常时髦酒吧Vue Bar(外滩茂悦大酒店)",
+   "cat": "BAR(루프탑 야경맛집)",
+   "image": "img/rest02.jpg",
+   "phone": "021-6393-1234",
+   "nameKr": "VUE BAR 뷰 바 (하얏트 온더 번드 호텔 루프탑)",
+   "desc": "#상하이 #상해 #야경맛집 #루프탑바 #하얏트온더번드 #32층 #푸동 #푸서 를 #한눈에 #입장료 : 160RMB(음료1잔 포함)",
+   "emoji": "🥤",
+   "hours": "17:00-01:30",
+   "address": "上海市黄埔区黄埔路199号上海外滩茂悦大酒店32楼",
+   "price": "160 RMB, 3만 KRW / 人 (음료 1잔 포함)",
+   "id": "rest02",
+   "oldId": "7S1e8irKo62I2EJoxI64"
+  },
+  {
+   "emoji": "🥤",
+   "cat": "BAR(루프탑 야경맛집)",
+   "hours": "14:30-17:00, 17:30-24:00",
+   "price": "3만 KRW ~, 128 RMB / 人",
+   "nameKr": "INDIGO호텔 루프탑 바",
+   "address": "上海市黄浦区南京东路199号上海艾迪逊酒店29楼",
+   "name": "顶层酒吧ROOF(上海艾迪逊酒店)",
+   "desc": "#상하이 #상해 #난징동루 #와이탄 끝자락 #인디고 호텔 #INDIGO 호텔 #29층 #루프탑 #야경 #입장료 128월(음료 1잔) #애프터눈티",
+   "image": "img/rest03.jpg",
+   "phone": "178-2163-3435",
+   "id": "rest03",
+   "oldId": "CN00POsJ8zHFuOgIMfjh"
+  },
+  {
+   "cat": "훠궈",
+   "image": "img/rest04.jpg",
+   "phone": "132-2293-3385",
+   "emoji": "🔥",
+   "name": "山出山贵州火锅(西岸梦中心)",
+   "address": "上海市徐汇区龙腾大道2266号4号楼2层4号207",
+   "price": "3만 KRW / 人 , 160 RMB / 人",
+   "desc": "비주얼과 맛을 모두 훔치는 훠궈 맛집!\n인증샷 셀카 스팟! \n신선한 야채와 고기 훠궈!",
+   "nameKr": "산추산 꾸이저우 훠궈 (시안멍중신)",
+   "id": "rest04",
+   "oldId": "Ck95UJR808Kk0ER8w8Ko"
+  },
+  {
+   "emoji": "🍝",
+   "cat": "양식",
+   "hours": "11:00-24:00",
+   "price": "3만 KRW ~ 5만 KRW (150RMB~250RMB) / 人",
+   "nameKr": "Chilli's Cafe&Car 칠리스 카페&바 (빈장점)",
+   "name": "奇利斯(滨江店)",
+   "desc": "#상하이 #상해 #푸동 #경치맛집 #야경맛집 #빈장따따오 #멕시칸음식 #맥주 #커피 #퀘사디아 #강변식당 #웨이팅 #예약필수",
+   "address": "上海市浦东新区滨江大道3072号",
+   "image": "img/rest05.jpg",
+   "phone": "186-1622-3072",
+   "id": "rest05",
+   "oldId": "OR3qUvTPL7qJu89KQrxx"
+  },
+  {
+   "desc": "#이태리 사람이 운영하는 #이태리 식당 #브런치 맛집 #남경서로 #난징시루 #난징서루 지하철 #짱웬 #张园 #카페거리 #쇼핑거리 #alimentari 시리즈",
+   "price": "3만 KRW~4만 KRW, 150RMB~200RMB / 人",
+   "hours": "08:30-24:00",
+   "name": "Alimentari Mulino 意大利餐吧&烘焙(丰盛里店)",
+   "emoji": "🍝",
+   "nameKr": "알리멘터리 뮬리노",
+   "phone": "021-6288-8538",
+   "address": "静安区茂名北路245弄4号",
+   "image": "img/rest06.jpg",
+   "cat": "양식",
+   "id": "rest06",
+   "oldId": "TvQvGkcIMyLmjKMqAfKQ"
+  },
+  {
+   "price": "2만 KRW / 人 , 100 RMB /人",
+   "nameKr": "헌지우이치엔(난징동루)",
+   "emoji": "🐑",
+   "address": "上海市黄浦区南京路步行街第一百货B管6楼",
+   "desc": "신선한 내몽고 아기양 양꼬치\n한국인들 좋아하는 1위 맛집!\n새벽 3시까지 하는 곳!",
+   "cat": "양꼬치",
+   "image": "img/rest07.jpg",
+   "phone": "010-5872-7417",
+   "name": "很久以前羊肉串(南京东路)",
+   "id": "rest07",
+   "oldId": "WibNPuNWZ0XkOZUyXZrK"
+  },
+  {
+   "cat": "카페",
+   "name": "星巴克臻选上海烘焙工坊",
+   "nameKr": "스타벅스리저브로스터리(starbucks reserve roastery)",
+   "desc": "#상하이 #상해 #난징시루 #난징서로 #남경서로 세계에서 3번째로 큰 #스타벅스 #스타벅스공장 #스타벅스굿즈 #포토스팟 #루이비통크루즈 옆 #타이구회 쇼핑몰 #南京西路 지하철 #커피 #로스터리커피 #베이커리 #알코올커피 #barmixtro #브런치",
+   "emoji": "☕",
+   "hours": "08:00-23:00",
+   "price": "2만 KRW~3만 KRW(90RMB~200RMB)",
+   "image": "img/rest08.jpg",
+   "phone": "400-8206-998",
+   "address": "上海市南京西路789号兴业太古汇N110",
+   "id": "rest08",
+   "oldId": "WrYEyNLyJUXu5IYfJIgg"
+  },
+  {
+   "emoji": "🥤",
+   "hours": "17:00-01:00",
+   "cat": "BAR(루프탑 야경맛집)",
+   "price": "3만 KRW ~, 158 RMB ~ / 人",
+   "nameKr": "FLAIR 플레어 루프탑 바(리츠칼튼 호텔)",
+   "address": "上海市浦东新区世纪大道8号国金中心上海浦东丽思卡尔顿酒店58楼",
+   "name": "FLAIR顶层餐厅酒吧(浦东丽思卡尔顿酒店)",
+   "desc": "#상하이 #상해 #루프탑바 #야경맛집 #푸동 #리츠칼튼호텔 58층 #동방명주 코앞 뷰 #와이탄 야경 #입장료 158 RMB(음료 1잔)",
+   "image": "img/rest09.jpg",
+   "phone": "021-2020-1778",
+   "id": "rest09",
+   "oldId": "smRUkCp8ZQxY3PrL9aAG"
+  },
+  {
+   "cat": "꿔바로우(동북탕수육)",
+   "phone": "021-5082-7562",
+   "image": "img/rest10.jpg",
+   "nameKr": "관동소마(루자주이헤이진점)",
+   "emoji": "🍲",
+   "price": "2만 KRW / 人 , 100 RMB / 人",
+   "name": "关东小磨东北菜(陆家嘴黑金店)",
+   "address": "上海市浦东新区浦东南路899号陆家嘴中心10楼",
+   "desc": "꿔바로우(동북 탕수육) 맛집!\n갓만든 바삭바삭한 꿔바로우를 맛보세요!",
+   "id": "rest10",
+   "oldId": "tDkarqvHMR1xDy8sXISk"
+  }
+ ],
+ "sights": [
+  {
+   "phone": "",
+   "image": "img/sight01.jpg",
+   "desc": "#상하이 #상해 #전통가옥 #정원 #한푸 #전통복 #체험\n영업시간 09:00-16:30",
+   "address": "上海市黄埔区福佑路168号",
+   "name": "예원(豫园)",
+   "emoji": "🏛️",
+   "id": "sight01",
+   "oldId": "2QtMGxNj4I5YxshrPKxb"
+  },
+  {
+   "desc": "#상하이 #상해 #우캉맨션 #우캉따로우 #사진스팟 #조계지 #카페거리",
+   "emoji": "🏛️",
+   "name": "우캉맨션(武康大楼)",
+   "image": "img/sight02.jpg",
+   "address": "上海市徐汇区淮海中路1850号",
+   "phone": "",
+   "id": "sight02",
+   "oldId": "BThu3AJbudDmNHu6uSyD"
+  },
+  {
+   "desc": "#상하이 #상해 #푸동 #한인성당 우리나라 최초 #신부님 #서품 받은 #성당 #김대건 #안드레아 #동상 #경당 #성지순례 #한인미사 #일요일 11:00~12:00 #다무즈광창 #大拇指广场 에 줄 적게 설 수 있는 #很久以前羊肉串 #헌지우이치엔 #양꼬치 식당 있음 #9호선 #팡디엔루 #芳甸路",
+   "emoji": "🏛️",
+   "image": "img/sight03.jpg",
+   "phone": "",
+   "name": "상하이 푸동 한인성당(김대건 신부님 서품 성당)",
+   "address": "上海市浦东新区花木街道紫槐路80号天主堂",
+   "id": "sight03",
+   "oldId": "QAATTyKP5pgPWpDQix4h"
+  },
+  {
+   "name": "주가각(朱家角) 수향마을",
+   "image": "img/sight04.jpg",
+   "address": "上海市青浦区西井街127-129号上海朱家角",
+   "phone": "",
+   "emoji": "🏛️",
+   "desc": "#상하이 #상해 #수향마을 #주가각 #나룻배 #옛날마을 시내에서 조금 멀어요. \n영업시간 08:00-15:00",
+   "id": "sight04",
+   "oldId": "U3PTfJEaA5gTOYw9XYbc"
+  },
+  {
+   "image": "img/sight05.jpg",
+   "desc": "#상하이 #상해 #대한민국 #임시정부 #신천지 #독립운동 \n입장시간 : 09:00-11:30, 13:30-17:00(16:30 입장종료)\n전화번호 : 0215382-9057",
+   "phone": "",
+   "name": "대한민국 임시정부",
+   "emoji": "🏛️",
+   "address": "上海市黄埔区马当路304号大韩民国临时政府旧址",
+   "id": "sight05",
+   "oldId": "XIXQiGzbeWU7Ro6wov2N"
+  },
+  {
+   "image": "img/sight06.jpg",
+   "phone": "",
+   "desc": "#상하이 #상해 #난징시루 #난징서루 #남경서로 #루이비통 #루이비똥 #사진촬영 \n영업시간 10:00-22:00(27년2월까지) 사전 예약 필요",
+   "name": "루이비통 크루즈(LV巨轮)",
+   "emoji": "🏛️",
+   "address": "上海市南京西路789号兴业太古汇",
+   "id": "sight06",
+   "oldId": "eFca0V0MayNjXhtj69Kf"
+  },
+  {
+   "phone": "",
+   "image": "img/sight07.jpg",
+   "desc": "#상하이 #상해 #옛날거리 재현 #테마파크 #공연장 #상하이 역사 #체험 #한푸 #치파오 체험 #서커스 #공연 #거리공연 #중국어 가 조금 되면 더 재밌는 #예약필수 \n영업시간 : 10:30-19:00 (17:30 입장 종료)\n가격 : 4만 KRW ~, 200RMB ~ / 人",
+   "address": "上海市浦东新区世博大道1750号",
+   "name": "치엔고정(千古情) 공연장",
+   "emoji": "🏛️",
+   "id": "sight07",
+   "oldId": "frrAd9Zm6oBFaVWQu0d2"
+  },
+  {
+   "image": "img/sight08.jpg",
+   "desc": "상하이는 황푸강 동쪽과 서쪽!\n옛날 상하이 예쁜 풍경을 품은 푸서 와이탄!\n와이탄에서 보는 푸동 루자주이 상하이타워와 동방명주! 야경과 함께 하는 미슐랭 맛집과 유람선을 즐겨보세요!",
+   "address": "上海黄浦区中山东一路外滩",
+   "phone": "",
+   "name": "와이탄(外滩)",
+   "emoji": "🏛️",
+   "id": "sight08",
+   "oldId": "pnwltjIuu1syZsvsBL2Z"
+  },
+  {
+   "emoji": "🏛️",
+   "name": "루자주이(陆家嘴)",
+   "desc": "#상하이 #상해 #푸동 #미래도시 #루자주이 #상하이타워 #병따개건물 #진마오따샤 #IFC #정따광창 #동방명주 #육씨집안동네 #매립지 #신도시",
+   "image": "img/sight09.jpg",
+   "address": "上海市浦东新区陆家嘴街道",
+   "phone": "",
+   "id": "sight09",
+   "oldId": "qKdJfL0WtYvpwJIzYcY4"
+  },
+  {
+   "emoji": "🏛️",
+   "desc": "#상하이 #상해 #푸동 #야경 #와이탄 건너편 #루자주이 #버스킹 #조깅 #자전거 #유람선 #산책 #조깅 #사진",
+   "phone": "",
+   "image": "img/sight10.jpg",
+   "name": "빈장따따오(滨江大道)",
+   "address": "上海浦东新区滨江大道",
+   "id": "sight10",
+   "oldId": "wySHHOOTUS5IayCe0wEc"
+  }
+ ],
+ "hotels": [
+  {
+   "phone": "021-2286-9999",
+   "image": "img/hotel01.jpg",
+   "desc": "명실상부 상하이 TOP 레벨 호텔!\n푸동 루자주이와 푸서 와이탄의 풍경을 한번에! 꼭 담아야 할 포토 스팟! 야외수영장이 일품!",
+   "stars": 5,
+   "name": "상하이와이탄W호텔(上海外滩W酒店)",
+   "address": "上海市虹口区旅顺路66号",
+   "price": "40만 KRW / 人 , 2000 RMB / 人 ～",
+   "id": "hotel01",
+   "oldId": "yl2XjIfd80AonsYFnGXr"
+  },
+  {
+   "desc": "상하이 푸동 야경 탑 호텔!\n루프탑 바 FLAIR 와 이그제큐티브 라운지에서 최고의 야경을 경험하세요!",
+   "image": "img/hotel02.jpg",
+   "phone": "021-2020-1888",
+   "stars": 5,
+   "name": "상하이 푸동 리츠칼튼(上海浦东丽思卡尔顿酒店)",
+   "price": "50만 KRW (2500 RMB) ~",
+   "address": "上海市浦东新区陆家嘴世纪大道8号国金中心1期52楼",
+   "id": "hotel02",
+   "oldId": "z0UZB6fRcJPBqGmRw5AM"
+  }
+ ],
+ "logo": "img/logo.png"
+}
