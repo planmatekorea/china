@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#1B2D5B">
+  <title>플랜메이트 관리자</title>
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, 'Noto Sans KR', 'Malgun Gothic', sans-serif; background: #f0f0f0; color: #222; }
+    .wrap { max-width: 500px; margin: 0 auto; min-height: 100vh; background: #fff; }
+    header { background: #1B2D5B; color: #fff; padding: 16px; }
+    header h1 { font-size: 17px; }
+    header p { font-size: 12px; color: #E2C97A; margin-top: 4px; }
+    main { padding: 16px; }
+    label { display: block; font-size: 13px; font-weight: 700; margin: 14px 0 6px; color: #1B2D5B; }
+    label small { font-weight: 400; color: #888; }
+    input[type=text], input[type=password], input[type=number], textarea, select { width: 100%; padding: 11px 12px; border: 1px solid #d5d5d5; border-radius: 10px; font-size: 16px; font-family: inherit; background: #fff; }
+    textarea { min-height: 80px; resize: vertical; }
+    .seg { display: flex; gap: 8px; }
+    .seg button { flex: 1; padding: 11px 0; border: 1px solid #d5d5d5; border-radius: 10px; background: #fff; font-size: 15px; font-family: inherit; cursor: pointer; }
+    .seg button.on { background: #1B2D5B; color: #fff; border-color: #1B2D5B; font-weight: 700; }
+    .row { display: flex; gap: 8px; }
+    .row > div { flex: 1; }
+    .row > div.narrow { flex: 0 0 90px; }
+    .btn { display: block; width: 100%; margin-top: 20px; padding: 14px; border: 0; border-radius: 12px; background: #C9A84C; color: #1B2D5B; font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer; }
+    .btn:disabled { opacity: .5; }
+    .btn.ghost { background: #fff; border: 1px solid #1B2D5B; color: #1B2D5B; margin-top: 10px; }
+    .hint { font-size: 12px; color: #888; margin-top: 4px; line-height: 1.5; }
+    .msg { margin-top: 14px; padding: 12px; border-radius: 10px; font-size: 14px; line-height: 1.6; display: none; }
+    .msg.show { display: block; }
+    .msg.ok { background: #e8f5e9; color: #1b5e20; }
+    .msg.err { background: #fdecea; color: #b71c1c; }
+    .msg.warn { background: #fff8e1; color: #8a6d00; }
+    .photo-box { display: flex; align-items: center; gap: 12px; }
+    .photo-box img { width: 84px; height: 84px; object-fit: cover; border-radius: 12px; border: 1px solid #ddd; display: none; }
+    .photo-pick { padding: 10px 14px; border: 1px dashed #1B2D5B; border-radius: 10px; color: #1B2D5B; font-size: 14px; cursor: pointer; background: #fafafa; }
+    details { margin-top: 16px; }
+    summary { font-size: 13px; color: #666; cursor: pointer; }
+    .hidden { display: none !important; }
+    .out { float: right; font-size: 12px; color: #E2C97A; background: none; border: 0; cursor: pointer; font-family: inherit; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <button class="out hidden" id="logoutBtn" type="button">로그아웃</button>
+    <h1>플랜메이트 관리자</h1>
+    <p>장소를 추가하면 1분 안에 앱에 나타나요</p>
+  </header>
+  <main>
+    <section id="loginBox">
+      <label for="pw">관리자 비밀번호</label>
+      <input type="password" id="pw" autocomplete="current-password" placeholder="비밀번호">
+      <button class="btn" id="loginBtn" type="button">로그인</button>
+      <div class="msg" id="loginMsg"></div>
+    </section>
+
+    <section id="formBox" class="hidden">
+      <label>종류</label>
+      <div class="seg" id="typeSeg">
+        <button type="button" data-type="rest" class="on">🍜 맛집</button>
+        <button type="button" data-type="sight">🏛️ 관광지</button>
+        <button type="button" data-type="hotel">🏨 호텔</button>
+      </div>
+
+      <div id="catRow">
+        <div class="row">
+          <div>
+            <label for="cat">분류 <small>(훠궈, 딤섬 등)</small></label>
+            <input type="text" id="cat" list="catList" maxlength="30" placeholder="예: 딤섬">
+            <datalist id="catList"></datalist>
+          </div>
+          <div class="narrow">
+            <label for="emoji">이모지</label>
+            <input type="text" id="emoji" maxlength="4" placeholder="🥟">
+          </div>
+        </div>
+      </div>
+
+      <label for="name">이름 <small>(중국어)</small></label>
+      <input type="text" id="name" maxlength="80" placeholder="例: 点都德(南京东路店)">
+      <label for="nameKr">이름 <small>(한국어)</small></label>
+      <input type="text" id="nameKr" maxlength="80" placeholder="예: 딤섬 맛집">
+
+      <label for="address">주소 <small>(중국어 — 택시 기사에게 보여줘요)</small></label>
+      <input type="text" id="address" maxlength="200" placeholder="例: 上海市黄浦区南京东路100号">
+      <p class="hint">주소를 넣으면 지도에서 좌표를 자동으로 찾아 "내 주변"에 쓰여요.</p>
+
+      <div class="row">
+        <div><label for="price">가격</label><input type="text" id="price" maxlength="80" placeholder="예: 100 RMB / 人"></div>
+        <div><label for="hours">영업시간</label><input type="text" id="hours" maxlength="100" placeholder="예: 10:00-22:00"></div>
+      </div>
+      <label for="phone">전화번호</label>
+      <input type="text" id="phone" maxlength="40" inputmode="tel" placeholder="예: 021-1234-5678">
+
+      <div id="starsRow" class="hidden">
+        <label for="stars">호텔 성급</label>
+        <select id="stars"><option value="0">모름</option><option value="3">3성급</option><option value="4">4성급</option><option value="5">5성급</option></select>
+      </div>
+
+      <label for="desc">설명 <small>(해시태그도 좋아요)</small></label>
+      <textarea id="desc" maxlength="500" placeholder="예: #딤섬 #줄서는집 #예약필수"></textarea>
+
+      <label>대표 사진 <small>(1장, 선택)</small></label>
+      <div class="photo-box">
+        <img id="photoPrev" alt="사진 미리보기">
+        <label class="photo-pick" for="photo" style="margin:0">📷 사진 선택</label>
+        <button type="button" class="photo-pick hidden" id="photoClear" style="background:#fff">지우기</button>
+      </div>
+      <input type="file" id="photo" accept="image/*" class="hidden">
+
+      <details>
+        <summary>좌표 직접 입력 (자동으로 못 찾을 때만)</summary>
+        <div class="row">
+          <div><label for="lat">위도</label><input type="number" id="lat" step="any" placeholder="31.2304"></div>
+          <div><label for="lng">경도</label><input type="number" id="lng" step="any" placeholder="121.4737"></div>
+        </div>
+      </details>
+
+      <button class="btn" id="saveBtn" type="button">장소 추가하기</button>
+      <div class="msg" id="saveMsg"></div>
+      <button class="btn ghost hidden" id="againBtn" type="button">또 추가하기</button>
+    </section>
+  </main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var API = 'https://script.google.com/macros/s/AKfycbyhy2GMAPTP89FjPytS8rUHNFQ8nVyGRjpDXbuhZNxbV6zdcLTLKKdEKlwRLMIKETjb/exec';
+  var password = '', type = 'rest', photoData = '', busy = false, cats = [];
+  var $ = function (id) { return document.getElementById(id); };
+
+  function show(el, cls, text) { el.className = 'msg show ' + cls; el.textContent = text; }
+  function hideMsg(el) { el.className = 'msg'; el.textContent = ''; }
+
+  function post(body) {
+    body.password = password;
+    return fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json(); });
+  }
+
+  // ----- 로그인 -----
+  function enter() {
+    $('loginBox').classList.add('hidden'); $('formBox').classList.remove('hidden'); $('logoutBtn').classList.remove('hidden');
+    try { sessionStorage.setItem('pm_admin_pw', password); } catch (e) {}
+  }
+  function leave() {
+    password = ''; try { sessionStorage.removeItem('pm_admin_pw'); } catch (e) {}
+    $('pw').value = ''; $('loginBox').classList.remove('hidden'); $('formBox').classList.add('hidden'); $('logoutBtn').classList.add('hidden');
+  }
+  function login(pw, silent) {
+    if (!pw) { show($('loginMsg'), 'err', '비밀번호를 입력해주세요'); return; }
+    password = pw; $('loginBtn').disabled = true; hideMsg($('loginMsg'));
+    post({ action: 'adminCheck' }).then(function (r) {
+      $('loginBtn').disabled = false;
+      if (r.ok) enter(); else { password = ''; if (!silent) show($('loginMsg'), 'err', r.error || '로그인하지 못했어요'); }
+    }).catch(function () { $('loginBtn').disabled = false; password = ''; if (!silent) show($('loginMsg'), 'err', '서버에 연결하지 못했어요. 인터넷을 확인해주세요'); });
+  }
+  $('loginBtn').addEventListener('click', function () { login($('pw').value, false); });
+  $('pw').addEventListener('keydown', function (e) { if (e.key === 'Enter') login($('pw').value, false); });
+  $('logoutBtn').addEventListener('click', leave);
+  try { var saved = sessionStorage.getItem('pm_admin_pw'); if (saved) login(saved, true); } catch (e) {}
+
+  // ----- 종류 선택 -----
+  function setType(t) {
+    type = t;
+    Array.prototype.forEach.call($('typeSeg').children, function (b) { b.classList.toggle('on', b.getAttribute('data-type') === t); });
+    $('catRow').classList.toggle('hidden', t !== 'rest');
+    $('starsRow').classList.toggle('hidden', t !== 'hotel');
+  }
+  $('typeSeg').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) setType(b.getAttribute('data-type')); });
+
+  // ----- 분류 목록(기존 분류) 불러와서 이모지 자동 입력 -----
+  fetch('data/places.json').then(function (r) { return r.json(); }).then(function (d) {
+    cats = d.categories || [];
+    $('catList').innerHTML = cats.map(function (c) { return '<option value="' + String(c.name).replace(/"/g, '&quot;') + '"></option>'; }).join('');
+  }).catch(function () {});
+  $('cat').addEventListener('input', function () {
+    var v = $('cat').value.trim();
+    var hit = cats.filter(function (c) { return c.name === v; })[0];
+    if (hit && !$('emoji').value) $('emoji').value = hit.emoji;
+  });
+
+  // ----- 사진: 휴대폰 사진은 커서 줄여서 보냅니다 -----
+  function shrink(file) {
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(file), img = new Image();
+      img.onload = function () {
+        var max = 1000, w = img.naturalWidth, h = img.naturalHeight, k = Math.min(1, max / Math.max(w, h));
+        var c = document.createElement('canvas'); c.width = Math.round(w * k); c.height = Math.round(h * k);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url); resolve(c.toDataURL('image/jpeg', 0.75));
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error('사진을 읽지 못했어요')); };
+      img.src = url;
+    });
+  }
+  function clearPhoto() { photoData = ''; $('photo').value = ''; $('photoPrev').style.display = 'none'; $('photoClear').classList.add('hidden'); }
+  $('photo').addEventListener('change', function () {
+    var f = $('photo').files[0]; if (!f) return;
+    shrink(f).then(function (d) { photoData = d; $('photoPrev').src = d; $('photoPrev').style.display = 'block'; $('photoClear').classList.remove('hidden'); })
+      .catch(function (e) { clearPhoto(); show($('saveMsg'), 'err', e.message); });
+  });
+  $('photoClear').addEventListener('click', clearPhoto);
+
+  // ----- 저장 -----
+  function val(id) { return $(id).value.trim(); }
+  function resetForm() {
+    ['cat', 'emoji', 'name', 'nameKr', 'address', 'price', 'hours', 'phone', 'desc', 'lat', 'lng'].forEach(function (id) { $(id).value = ''; });
+    $('stars').value = '0'; clearPhoto();
+  }
+  $('saveBtn').addEventListener('click', function () {
+    if (busy) return;
+    if (!val('name') && !val('nameKr')) { show($('saveMsg'), 'err', '이름을 입력해주세요'); return; }
+    if (type === 'rest' && !val('cat')) { show($('saveMsg'), 'err', '맛집은 분류를 입력해주세요 (예: 딤섬)'); return; }
+    busy = true; $('saveBtn').disabled = true; show($('saveMsg'), 'warn', '저장하는 중이에요… (주소로 좌표를 찾느라 몇 초 걸릴 수 있어요)');
+    post({
+      action: 'addPlace', type: type, cat: val('cat'), emoji: val('emoji'), name: val('name'), nameKr: val('nameKr'), address: val('address'),
+      price: val('price'), hours: val('hours'), phone: val('phone'), desc: val('desc'), stars: val('stars'), image: photoData, lat: val('lat'), lng: val('lng')
+    }).then(function (r) {
+      busy = false; $('saveBtn').disabled = false;
+      if (!r.ok) { show($('saveMsg'), 'err', r.error || '저장하지 못했어요'); if (/비밀번호/.test(r.error || '')) leave(); return; }
+      var gps = r.geocoded ? '주소로 좌표도 찾았어요 ✅' : (val('lat') && val('lng') ? '입력한 좌표를 저장했어요' : '주소에서 좌표를 못 찾았어요. "내 주변"에는 안 나와요 (구글 시트 places 탭에서 위도/경도를 직접 넣을 수 있어요)');
+      show($('saveMsg'), r.geocoded || (val('lat') && val('lng')) ? 'ok' : 'warn', '추가됐어요! 1분쯤 뒤 앱에 나타나요.\n' + gps);
+      $('saveMsg').style.whiteSpace = 'pre-line';
+      $('saveBtn').classList.add('hidden'); $('againBtn').classList.remove('hidden');
+    }).catch(function () { busy = false; $('saveBtn').disabled = false; show($('saveMsg'), 'err', '서버에 연결하지 못했어요. 인터넷을 확인해주세요'); });
+  });
+  $('againBtn').addEventListener('click', function () { resetForm(); hideMsg($('saveMsg')); $('againBtn').classList.add('hidden'); $('saveBtn').classList.remove('hidden'); window.scrollTo(0, 0); });
+})();
+</script>
+</body>
+</html>

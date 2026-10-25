@@ -94,6 +94,10 @@
     .g-cap { text-align: center; color: rgba(255,255,255,0.6); font-size: 12px; padding: 12px 12px 24px; }
     .install-bar { display: none; position: fixed; left: 50%; transform: translateX(-50%); bottom: 12px; width: calc(100% - 24px); max-width: 476px; background: #1B2D5B; color: #fff; border-radius: 14px; padding: 12px 14px; z-index: 400; box-shadow: 0 4px 16px rgba(0,0,0,0.25); font-size: 13px; line-height: 1.5; align-items: center; gap: 10px; }
     .install-bar.show { display: flex; }
+    .kakao-bar { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 300; background: #FEE500; color: #191919; padding: 10px 14px; font-size: 13px; line-height: 1.5; align-items: center; gap: 10px; }
+    .kakao-bar.show { display: flex; }
+    .kakao-bar .kakao-text { flex: 1; }
+    .kakao-bar button { border: 0; cursor: pointer; font-family: inherit; background: #191919; color: #FEE500; font-weight: 700; border-radius: 16px; padding: 8px 12px; font-size: 13px; white-space: nowrap; }
     .install-bar .install-text { flex: 1; }
     .install-bar b { color: #E2C97A; }
     .install-bar button { border: 0; cursor: pointer; font-family: inherit; }
@@ -155,6 +159,10 @@
   </div>
   <div id="toast" class="toast"></div>
 </div>
+<div id="kakaoBar" class="kakao-bar" role="alert">
+  <div class="kakao-text">카카오톡 안에서는 <b>앱 설치와 저장</b>이 안 돼요. 기본 브라우저로 열어주세요.</div>
+  <button type="button" id="kakaoGo">브라우저로 열기</button>
+</div>
 <div id="installBar" class="install-bar" role="dialog" aria-label="앱 설치 안내">
   <div class="install-text" id="installText"></div>
   <button type="button" class="install-go" id="installGo" style="display:none">앱 설치</button>
@@ -203,11 +211,49 @@
       state.reviews = state.legacy.slice();
       renderAll();
       refreshWriteSelect();
+      loadSheetPlaces();
       loadSheetReviews();
     }).catch(function (e) {
       console.error(e);
       ['restaurantList', 'sightsList', 'hotelsList'].forEach(function (id) { $(id).innerHTML = '<div class="empty">데이터를 불러오지 못했어요. 잠시 후 다시 시도해주세요.</div>'; });
     });
+  }
+
+  // ===== 관리자가 시트로 추가한 장소 합치기 (인터넷이 안 되면 마지막으로 받은 것 사용) =====
+  function apiUrl(action) { return CONFIG.REVIEW_API_URL + (CONFIG.REVIEW_API_URL.indexOf('?') > -1 ? '&' : '?') + 'action=' + action; }
+
+  function loadSheetPlaces() {
+    if (!CONFIG.REVIEW_API_URL) return;
+    fetchJson(apiUrl('places')).then(function (list) {
+      try { localStorage.setItem('pm_places_cache', JSON.stringify(list)); } catch (e) {}
+      applySheetPlaces(list);
+    }).catch(function () {
+      try { var c = localStorage.getItem('pm_places_cache'); if (c) applySheetPlaces(JSON.parse(c)); } catch (e) {}
+    });
+  }
+
+  function applySheetPlaces(list) {
+    if (!Array.isArray(list)) return;
+    var added = { rest: [], sight: [], hotel: [] };
+    list.forEach(function (r) {
+      if (!r || !added[r.type] || !/^[a-z]+[0-9]{1,4}$/.test(String(r.id))) return;
+      var p = {
+        _sheet: true, id: String(r.id), cat: String(r.cat || ''), emoji: String(r.emoji || ''), name: String(r.name || ''), nameKr: String(r.nameKr || ''),
+        address: String(r.address || ''), price: String(r.price || ''), hours: String(r.hours || ''), phone: String(r.phone || ''), desc: String(r.desc || ''),
+        stars: Number(r.stars) || 0, image: safeUrl(r.image)
+      };
+      if (typeof r.lat === 'number' && typeof r.lng === 'number') { p.lat = r.lat; p.lng = r.lng; }
+      if (!p.name) return;
+      added[r.type].push(p);
+      if (r.type === 'rest' && p.cat && !state.categories.some(function (c) { return c.name === p.cat; })) state.categories.push({ name: p.cat, emoji: p.emoji || '🍜' });
+    });
+    Object.keys(added).forEach(function (t) {
+      var base = state.places[t].filter(function (p) { return !p._sheet; });
+      var ids = {}; base.forEach(function (p) { ids[p.id] = 1; });
+      state.places[t] = added[t].filter(function (p) { return !ids[p.id]; }).concat(base);
+    });
+    renderAll();
+    refreshWriteSelect($('writeSelect').value);
   }
 
   function loadSheetReviews() {
@@ -478,6 +524,21 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
   }
+
+  // ===== 카카오톡 안에서 열렸으면 기본 브라우저(Safari/크롬)로 옮기기 =====
+  function setupKakaoEscape() {
+    if (!/KAKAOTALK/i.test(navigator.userAgent || '')) return;
+    var bar = $('kakaoBar'), go = $('kakaoGo');
+    if (!bar || !go) return;
+    var target = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href.split('#')[0]);
+    var isAndroid = /android/i.test(navigator.userAgent);
+    function open() { location.href = target; }
+    go.addEventListener('click', open);
+    bar.classList.add('show');
+    document.body.style.paddingTop = '58px';
+    try { if (sessionStorage.getItem('pm_kakao_tried') !== '1') { sessionStorage.setItem('pm_kakao_tried', '1'); setTimeout(open, 300); } } catch (e) {}
+  }
+  setupKakaoEscape();
   setupInstall();
   updateWriteNotice(); drawPhotos(); load();
 })();
