@@ -168,6 +168,11 @@
     .gv-qr { display: flex; gap: 12px; margin-top: 8px; }
     .gv-qr figure { margin: 0; flex: 1; text-align: center; font-size: 12px; color: #555; }
     .gv-qr img { width: 100%; max-width: 130px; border: 1px solid #ddd; border-radius: 8px; background: white; }
+    .gd-ico.imgs { width: 46px; align-items: center; display: flex; flex-direction: column; gap: 6px; }
+    .gd-ico img { width: 44px; height: 44px; border-radius: 10px; display: block; box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
+    .gd-ico.imgs.two img { width: 38px; height: 38px; }
+    .gv-hic { display: inline-flex; gap: 6px; vertical-align: middle; margin-right: 6px; }
+    .gv-hic img { width: 34px; height: 34px; border-radius: 8px; box-shadow: 0 0 0 1px rgba(0,0,0,.08); }
   </style>
 </head>
 <body>
@@ -519,6 +524,11 @@
   try { guides.done = JSON.parse(localStorage.getItem('pm_guide_done') || '{}') || {}; } catch (e) { guides.done = {}; }
   function saveDone() { try { localStorage.setItem('pm_guide_done', JSON.stringify(guides.done)); } catch (e) {} }
   function md(t) { return esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>'); }
+  function icoHtml(g) {
+    var im = (g.iconImgs || []).map(safeUrl).filter(Boolean);
+    if (!im.length) return '<span class="gd-ico">' + esc(g.icon || '📘') + '</span>';
+    return '<span class="gd-ico imgs' + (im.length > 1 ? ' two' : '') + '">' + im.map(function (u) { return '<img src="' + esc(u) + '" alt="">'; }).join('') + '</span>';
+  }
   function chips(g) { return (g.badges || []).length ? '<div class="gd-chips">' + g.badges.map(function (b) { var bg = /^#[0-9a-fA-F]{3,6}$/.test(b.bg || '') ? b.bg : '#1B2D5B', fg = /^#[0-9a-fA-F]{3,6}$/.test(b.fg || '') ? b.fg : '#fff'; return '<span class="gd-chip" style="background:' + bg + ';color:' + fg + '">' + esc(b.text) + (b.sub ? '<small>' + esc(b.sub) + '</small>' : '') + '</span>'; }).join('') + '</div>' : ''; }
   function isApple() { return /iPhone|iPad|iPod|Macintosh/i.test(navigator.userAgent || ''); }
   function dlBox(g) {
@@ -543,7 +553,7 @@
     d.guides.forEach(function (g) {
       var c = guideCount(g);
       var prog = c.n === 0 ? '시작 ›' : (c.n >= c.total ? '✓ 완료' : c.n + '/' + c.total);
-      h += '<button type="button" class="gd-card" data-gid="' + esc(g.id) + '"><span class="gd-ico">' + esc(g.icon || '📘') + '</span><span class="gd-body"><span class="gd-title">' + esc(g.title) + '</span>' + chips(g) + '<div class="gd-sub">' + esc(g.sub || '') + '</div><div class="gd-meta">⏱ ' + esc(g.time || '') + ' · ' + c.total + '단계</div></span><span class="gd-prog' + (c.n >= c.total ? ' done' : '') + '">' + prog + '</span></button>';
+      h += '<button type="button" class="gd-card" data-gid="' + esc(g.id) + '">' + icoHtml(g) + '<span class="gd-body"><span class="gd-title">' + esc(g.title) + '</span>' + chips(g) + '<div class="gd-sub">' + esc(g.sub || '') + '</div><div class="gd-meta">⏱ ' + esc(g.time || '') + ' · ' + c.total + '단계</div></span><span class="gd-prog' + (c.n >= c.total ? ' done' : '') + '">' + prog + '</span></button>';
     });
     if ((d.soon || []).length) h += '<div class="gd-soon">곧 추가돼요<br>' + d.soon.map(esc).join(' · ') + '</div>';
     h += '<a class="btn gd-help" style="display:block;text-align:center;text-decoration:none;box-sizing:border-box" href="' + esc(CONFIG.KAKAO_URL || 'https://open.kakao.com/o/sYtvh9pi') + '" target="_blank" rel="noopener">💬 막히면 카톡으로 물어보기</a>';
@@ -556,7 +566,7 @@
     if (!guides.data) return;
     var g = guides.data.guides.filter(function (x) { return x.id === id; })[0]; if (!g) return;
     var h = '<div class="gv-in"><div class="gv-top"><button type="button" id="gvBack">‹ 목록</button><span class="gv-t">' + esc(g.title) + '</span><span id="gvCount" style="font-size:12px"></span></div><div class="gv-bar"><i id="gvBar"></i></div>';
-    h += '<div class="gv-head"><h2>' + esc(g.icon || '') + ' ' + esc(g.title) + '</h2>' + chips(g) + '<p>' + md(g.why || '') + '</p><div class="gv-basis">' + esc(g.basis || '') + '</div></div>';
+    h += '<div class="gv-head"><h2>' + ((g.iconImgs || []).length ? '<span class="gv-hic">' + g.iconImgs.map(safeUrl).filter(Boolean).map(function (u) { return '<img src="' + esc(u) + '" alt="">'; }).join('') + '</span>' : esc(g.icon || '') + ' ') + esc(g.title) + '</h2>' + chips(g) + '<p>' + md(g.why || '') + '</p><div class="gv-basis">' + esc(g.basis || '') + '</div></div>';
     if ((g.links || []).length) h += '<div class="gv-foot" style="margin-top:12px">' + g.links.map(function (l) { var u = safeUrl(l.url); return u ? '<a class="btn" style="display:block;text-align:center;text-decoration:none;box-sizing:border-box" href="' + esc(u) + '" target="_blank" rel="noopener">🔗 ' + esc(l.label) + '</a>' : ''; }).join('') + '</div>';
     h += dlBox(g);
     if ((g.prep || []).length) h += '<div class="gv-box gv-prep"><h4>📋 먼저 준비하세요</h4><ul>' + g.prep.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>';
