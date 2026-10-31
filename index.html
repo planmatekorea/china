@@ -103,6 +103,58 @@
     .install-bar button { border: 0; cursor: pointer; font-family: inherit; }
     .install-bar .install-go { background: #C9A84C; color: #1B2D5B; font-weight: 700; border-radius: 18px; padding: 8px 14px; font-size: 13px; white-space: nowrap; }
     .install-bar .install-close { background: transparent; color: #fff; font-size: 18px; padding: 4px 6px; }
+
+    /* 필수정보 가이드 */
+    .tab { font-size: 13px; padding: 14px 2px; }
+    .gd-hero { background: #FFF8E1; border: 1px solid #F0DFA0; border-radius: 14px; padding: 14px; margin-bottom: 14px; font-size: 14px; line-height: 1.6; color: #444; }
+    .gd-hero b { color: #1B2D5B; }
+    .gd-hero ul { margin: 6px 0 0 18px; padding: 0; }
+    .gd-card { display: flex; gap: 12px; align-items: center; width: 100%; text-align: left; background: white; border: 1px solid #e6e6ee; border-radius: 14px; padding: 14px; margin-bottom: 10px; cursor: pointer; font-family: inherit; }
+    .gd-card:active { background: #f6f6fa; }
+    .gd-ico { font-size: 30px; flex: none; }
+    .gd-body { flex: 1; min-width: 0; }
+    .gd-title { font-weight: 700; color: #1B2D5B; font-size: 15px; }
+    .gd-sub { font-size: 12.5px; color: #666; margin-top: 3px; line-height: 1.4; }
+    .gd-meta { font-size: 11.5px; color: #8a7a3a; margin-top: 5px; }
+    .gd-prog { font-size: 12px; font-weight: 700; color: #1B2D5B; flex: none; }
+    .gd-prog.done { color: #1a8a4a; }
+    .gd-soon { margin-top: 14px; font-size: 13px; color: #888; text-align: center; line-height: 1.7; }
+    .gd-help { margin-top: 10px; width: 100%; }
+    #guideView { display: none; position: fixed; inset: 0; z-index: 1050; background: white; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    #guideView.show { display: block; }
+    .gv-in { max-width: 500px; margin: 0 auto; padding-bottom: 80px; }
+    .gv-top { position: sticky; top: 0; background: #1B2D5B; color: white; padding: 12px 14px; display: flex; align-items: center; gap: 10px; z-index: 2; }
+    .gv-top button { background: rgba(255,255,255,.18); border: none; color: white; border-radius: 20px; padding: 6px 12px; font-size: 13px; cursor: pointer; font-family: inherit; }
+    .gv-top .gv-t { flex: 1; font-weight: 700; font-size: 15px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .gv-bar { height: 4px; background: rgba(255,255,255,.25); }
+    .gv-bar i { display: block; height: 100%; width: 0; background: #C9A84C; transition: width .25s; }
+    .gv-sec { padding: 0 16px; }
+    .gv-head { padding: 18px 16px 4px; }
+    .gv-head h2 { margin: 0; font-size: 20px; color: #1B2D5B; }
+    .gv-head p { margin: 6px 0 0; font-size: 14px; color: #555; line-height: 1.6; }
+    .gv-basis { font-size: 11.5px; color: #8a7a3a; margin-top: 8px; }
+    .gv-box { margin: 14px 16px 0; border-radius: 12px; padding: 12px 14px; font-size: 14px; line-height: 1.6; }
+    .gv-box h4 { margin: 0 0 6px; font-size: 13.5px; }
+    .gv-box ul { margin: 0; padding-left: 18px; }
+    .gv-prep { background: #EEF3FF; color: #1B2D5B; }
+    .gv-tips { background: #FFF3E0; color: #7a4a00; }
+    .gv-h3 { margin: 26px 16px 6px; font-size: 16px; color: #1B2D5B; padding-bottom: 6px; border-bottom: 2px solid #C9A84C; }
+    .gv-intro { margin: 0 16px 8px; font-size: 13.5px; color: #666; line-height: 1.6; }
+    .gv-step { display: flex; gap: 12px; margin: 12px 16px 0; padding: 14px; border: 1px solid #e6e6ee; border-radius: 14px; cursor: pointer; }
+    .gv-step.done { background: #F1FAF4; border-color: #BFE3CB; }
+    .gv-num { flex: none; width: 30px; height: 30px; border-radius: 50%; background: #1B2D5B; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
+    .gv-step.done .gv-num { background: #1a8a4a; }
+    .gv-txt { flex: 1; min-width: 0; font-size: 15px; line-height: 1.6; color: #222; }
+    .gv-txt b { color: #1B2D5B; background: #FFF1B8; padding: 0 2px; border-radius: 3px; }
+    .gv-note { margin-top: 8px; font-size: 13px; color: #6a6a6a; background: #f6f6f9; border-radius: 8px; padding: 8px 10px; line-height: 1.55; }
+    .gv-img { display: block; width: 100%; max-width: 260px; margin-top: 10px; border-radius: 10px; border: 1px solid #ddd; }
+    .gv-chk { margin-top: 8px; font-size: 12px; color: #999; }
+    .gv-step.done .gv-chk { color: #1a8a4a; }
+    .gv-bul { margin: 8px 16px 0; padding: 0 0 0 34px; font-size: 14.5px; line-height: 1.7; color: #333; }
+    .gv-src { margin: 24px 16px 0; font-size: 12.5px; color: #777; line-height: 1.6; }
+    .gv-src a { display: inline-block; margin-top: 6px; color: #1B2D5B; font-weight: 700; }
+    .gv-foot { margin: 16px 16px 0; display: flex; flex-direction: column; gap: 8px; }
+    .gv-reset { background: none; border: 1px solid #ccc; color: #777; border-radius: 10px; padding: 10px; font-size: 13px; cursor: pointer; font-family: inherit; }
   </style>
 </head>
 <body>
@@ -123,12 +175,15 @@
     <button class="tab active" data-tab="list">🍜 맛집</button>
     <button class="tab" data-tab="sights">🏛️ 관광지</button>
     <button class="tab" data-tab="hotels">🏨 호텔</button>
+    <button class="tab" data-tab="guide">📘 필수</button>
     <button class="tab" data-tab="write">✍️ 리뷰</button>
   </div>
 
-  <div class="panel active" id="panel-list"><div id="restaurantList"></div></div>
+  <div class="panel active" id="panel-list"><button type="button" class="gd-card" id="guideBanner" style="background:#FFF8E1;border-color:#F0DFA0"><span class="gd-ico">🇨🇳</span><span class="gd-body"><span class="gd-title">처음 오세요? 입국카드·결제 준비!</span><div class="gd-sub">출발 전에 끝내두면 도착해서 편해요</div></span><span class="gd-prog">보기 ›</span></button><div id="restaurantList"></div></div>
   <div class="panel" id="panel-sights"><div id="sightsList"></div></div>
   <div class="panel" id="panel-hotels"><div id="hotelsList"></div></div>
+
+  <div class="panel" id="panel-guide"><div id="guideList"></div></div>
 
   <div class="panel" id="panel-write">
     <div class="notice" id="writeNotice"></div>
@@ -151,6 +206,7 @@
     <button class="btn" id="submitBtn">리뷰 등록</button>
   </div>
 
+  <div id="guideView" role="dialog" aria-label="필수정보 가이드"></div>
   <div id="infoModal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modalTitle">상세 정보</h3><button class="modal-close" id="modalClose" aria-label="닫기">&times;</button></div><div class="modal-body" id="modalBody"></div></div></div>
   <div id="gallery">
     <div class="g-top"><span id="gTitle"></span><button class="g-close" id="gClose" aria-label="닫기">✕</button></div>
@@ -444,6 +500,94 @@
     navigator.geolocation.getCurrentPosition(function (pos) { state.nearby = { lat: pos.coords.latitude, lng: pos.coords.longitude, radius: 3 }; renderAll(); }, function () { toast('위치 권한이 필요해요'); });
   }
 
+
+  // ===== 필수정보 가이드 =====
+  var guides = { data: null, done: {} };
+  try { guides.done = JSON.parse(localStorage.getItem('pm_guide_done') || '{}') || {}; } catch (e) { guides.done = {}; }
+  function saveDone() { try { localStorage.setItem('pm_guide_done', JSON.stringify(guides.done)); } catch (e) {} }
+  function md(t) { return esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>'); }
+  function guideSteps(g) { var out = []; g.sections.forEach(function (sec, si) { (sec.steps || []).forEach(function (st, i) { out.push({ key: g.id + ':' + si + ':' + i }); }); }); return out; }
+  function guideCount(g) { var all = guideSteps(g); var n = all.filter(function (x) { return guides.done[x.key]; }).length; return { n: n, total: all.length }; }
+  function renderGuideList() {
+    var d = guides.data; var box = $('guideList');
+    if (!d) { box.innerHTML = '<div class="empty">불러오는 중…</div>'; return; }
+    var h = '<div class="gd-hero"><b>' + esc(d.listTitle || '출발 전 준비') + '</b><ul>' + (d.listNote || []).map(function (x) { return '<li>' + md(x) + '</li>'; }).join('') + '</ul></div>';
+    d.guides.forEach(function (g) {
+      var c = guideCount(g);
+      var prog = c.n === 0 ? '시작 ›' : (c.n >= c.total ? '✓ 완료' : c.n + '/' + c.total);
+      h += '<button type="button" class="gd-card" data-gid="' + esc(g.id) + '"><span class="gd-ico">' + esc(g.icon || '📘') + '</span><span class="gd-body"><span class="gd-title">' + esc(g.title) + '</span><div class="gd-sub">' + esc(g.sub || '') + '</div><div class="gd-meta">⏱ ' + esc(g.time || '') + ' · ' + c.total + '단계</div></span><span class="gd-prog' + (c.n >= c.total ? ' done' : '') + '">' + prog + '</span></button>';
+    });
+    if ((d.soon || []).length) h += '<div class="gd-soon">곧 추가돼요<br>' + d.soon.map(esc).join(' · ') + '</div>';
+    h += '<a class="btn gd-help" style="display:block;text-align:center;text-decoration:none;box-sizing:border-box" href="' + esc(CONFIG.KAKAO_URL || 'https://open.kakao.com/o/sYtvh9pi') + '" target="_blank" rel="noopener">💬 막히면 카톡으로 물어보기</a>';
+    box.innerHTML = h;
+  }
+  function loadGuides() {
+    return fetchJson('data/guides.json?v=' + encodeURIComponent(CONFIG.DATA_VERSION)).then(function (d) { guides.data = d; renderGuideList(); routeHash(); }).catch(function () { $('guideList').innerHTML = '<div class="empty">가이드를 불러오지 못했어요. 인터넷을 확인해주세요.</div>'; });
+  }
+  function openGuide(id, noHash) {
+    if (!guides.data) return;
+    var g = guides.data.guides.filter(function (x) { return x.id === id; })[0]; if (!g) return;
+    var h = '<div class="gv-in"><div class="gv-top"><button type="button" id="gvBack">‹ 목록</button><span class="gv-t">' + esc(g.title) + '</span><span id="gvCount" style="font-size:12px"></span></div><div class="gv-bar"><i id="gvBar"></i></div>';
+    h += '<div class="gv-head"><h2>' + esc(g.icon || '') + ' ' + esc(g.title) + '</h2><p>' + md(g.why || '') + '</p><div class="gv-basis">' + esc(g.basis || '') + '</div></div>';
+    if ((g.links || []).length) h += '<div class="gv-foot" style="margin-top:12px">' + g.links.map(function (l) { var u = safeUrl(l.url); return u ? '<a class="btn" style="display:block;text-align:center;text-decoration:none;box-sizing:border-box" href="' + esc(u) + '" target="_blank" rel="noopener">🔗 ' + esc(l.label) + '</a>' : ''; }).join('') + '</div>';
+    if ((g.prep || []).length) h += '<div class="gv-box gv-prep"><h4>📋 먼저 준비하세요</h4><ul>' + g.prep.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>';
+    var n = 0;
+    g.sections.forEach(function (sec, si) {
+      h += '<div class="gv-h3">' + esc(sec.title) + '</div>';
+      if (sec.intro) h += '<p class="gv-intro">' + md(sec.intro) + '</p>';
+      (sec.steps || []).forEach(function (st, i) {
+        n++; var key = g.id + ':' + si + ':' + i; var done = !!guides.done[key];
+        var imgs = st.img ? (Array.isArray(st.img) ? st.img : [st.img]) : [];
+        h += '<div class="gv-step' + (done ? ' done' : '') + '" data-key="' + esc(key) + '"><div class="gv-num">' + n + '</div><div class="gv-txt">' + md(st.text);
+        if (st.note) h += '<div class="gv-note">💡 ' + md(st.note) + '</div>';
+        imgs.forEach(function (u) { var su = safeUrl(u); if (su) h += '<img class="gv-img" loading="lazy" data-zoom="' + esc(su) + '" src="' + esc(su) + '" alt="' + n + '단계 화면">'; });
+        h += '<div class="gv-chk">' + (done ? '✓ 완료했어요 (다시 누르면 취소)' : '눌러서 완료 표시') + '</div></div></div>';
+      });
+      if ((sec.bullets || []).length) h += '<ul class="gv-bul">' + sec.bullets.map(function (x) { return '<li>' + md(x) + '</li>'; }).join('') + '</ul>';
+    });
+    if ((g.tips || []).length) h += '<div class="gv-box gv-tips"><h4>⚠️ 꼭 기억하세요</h4><ul>' + g.tips.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>';
+    if (g.source) { var su2 = safeUrl(g.source.url); h += '<div class="gv-src"><span style="font-size:11.5px">' + esc(g.source.name) + (su2 ? ' · <a href="' + esc(su2) + '" target="_blank" rel="noopener">원문</a>' : '') + '</span></div>'; }
+    h += '<div class="gv-foot"><a class="btn" style="display:block;text-align:center;text-decoration:none;box-sizing:border-box" href="' + esc(CONFIG.KAKAO_URL || 'https://open.kakao.com/o/sYtvh9pi') + '" target="_blank" rel="noopener">💬 막히면 카톡으로 물어보기</a><button type="button" class="gv-reset" id="gvReset">체크 표시 모두 지우기</button></div></div>';
+    var v = $('guideView'); v.innerHTML = h; v.dataset.gid = id; v.classList.add('show'); v.scrollTop = 0;
+    document.body.style.overflow = 'hidden';
+    updateGuideProgress(g);
+    if (!noHash) { try { history.replaceState(null, '', '#guide/' + id); } catch (e) { location.hash = 'guide/' + id; } }
+  }
+  function updateGuideProgress(g) {
+    var c = guideCount(g); var bar = $('gvBar'), cnt = $('gvCount');
+    if (bar) bar.style.width = (c.total ? Math.round(c.n / c.total * 100) : 0) + '%';
+    if (cnt) cnt.textContent = c.n + '/' + c.total;
+  }
+  function closeGuide() {
+    $('guideView').classList.remove('show'); document.body.style.overflow = '';
+    renderGuideList();
+    try { history.replaceState(null, '', location.pathname + location.search + '#guide'); } catch (e) {}
+  }
+  function showGuideTab() { document.querySelector('.tab[data-tab="guide"]').click(); }
+  function routeHash() {
+    var m = /^#guide(?:\/([\w-]+))?$/.exec(location.hash || ''); if (!m) return;
+    showGuideTab(); window.scrollTo(0, 0);
+    if (m[1]) openGuide(m[1], true);
+  }
+  $('guideBanner').addEventListener('click', function () { showGuideTab(); window.scrollTo(0, 0); });
+  $('guideList').addEventListener('click', function (e) { var c = e.target.closest('.gd-card'); if (c && c.dataset.gid) openGuide(c.dataset.gid); });
+  $('guideView').addEventListener('click', function (e) {
+    var t = e.target;
+    if (t.closest('#gvBack')) { closeGuide(); return; }
+    if (t.closest('#gvReset')) {
+      var gid = this.dataset.gid; Object.keys(guides.done).forEach(function (k) { if (k.indexOf(gid + ':') === 0) delete guides.done[k]; }); saveDone(); openGuide(gid, true); return;
+    }
+    if (t.tagName === 'IMG' && t.dataset.zoom) { e.stopPropagation(); openGallery([{ src: t.dataset.zoom, cap: '' }], 0); return; }
+    if (t.closest('a')) return;
+    var st = t.closest('.gv-step'); if (!st) return;
+    var key = st.dataset.key; if (guides.done[key]) delete guides.done[key]; else guides.done[key] = 1;
+    saveDone();
+    var done = !!guides.done[key]; st.classList.toggle('done', done);
+    st.querySelector('.gv-chk').textContent = done ? '✓ 완료했어요 (다시 누르면 취소)' : '눌러서 완료 표시';
+    var g = guides.data.guides.filter(function (x) { return x.id === $('guideView').dataset.gid; })[0]; if (g) updateGuideProgress(g);
+  });
+  window.addEventListener('hashchange', function () { if (/^#guide/.test(location.hash)) routeHash(); });
+
   // ===== 이벤트 =====
   document.querySelectorAll('.tab').forEach(function (t) {
     t.addEventListener('click', function () {
@@ -488,7 +632,7 @@
     else if (e.target.id === 'addPhoto') $('writePhotoInput').click();
   });
   $('submitBtn').addEventListener('click', submitReview);
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { $('gallery').classList.remove('show'); closeModal(); } });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { if ($('gallery').classList.contains('show')) $('gallery').classList.remove('show'); else if ($('guideView').classList.contains('show')) closeGuide(); else closeModal(); } });
 
 
   // ===== 앱처럼 설치하기 (홈 화면에 추가) =====
@@ -540,7 +684,7 @@
   }
   setupKakaoEscape();
   setupInstall();
-  updateWriteNotice(); drawPhotos(); load();
+  updateWriteNotice(); drawPhotos(); load(); loadGuides();
 })();
 </script>
 </body>

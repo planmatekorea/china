@@ -1,7 +1,7 @@
 // 플랜메이트 서비스 워커: 한 번 열어 본 화면과 데이터를 저장해 두어 인터넷이 약해도 볼 수 있게 합니다.
 // 리뷰 서버(Apps Script)와 구글 폰트 등 다른 사이트 요청은 건드리지 않습니다.
-var CACHE = 'planmate-v1';
-var SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png', 'img/logo.png'];
+var CACHE = 'planmate-v2';
+var SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png', 'img/logo.png', 'data/guides.json'];
 
 self.addEventListener('install', function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(SHELL); }).then(function () { return self.skipWaiting(); }));
