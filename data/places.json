@@ -66,7 +66,8 @@
    "emoji": "🔥",
    "hours": "",
    "id": "rest01",
-   "oldId": "4OW4HDIbMNK11Jw5PCxd"
+   "oldId": "4OW4HDIbMNK11Jw5PCxd",
+   "free": true
   },
   {
    "name": "非常时髦酒吧Vue Bar(外滩茂悦大酒店)",
@@ -148,7 +149,8 @@
    "phone": "010-5872-7417",
    "name": "很久以前羊肉串(南京东路)",
    "id": "rest07",
-   "oldId": "WibNPuNWZ0XkOZUyXZrK"
+   "oldId": "WibNPuNWZ0XkOZUyXZrK",
+   "free": true
   },
   {
    "cat": "카페",

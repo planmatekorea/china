@@ -70,6 +70,17 @@
     .review-images { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
     .review-img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 1px solid #eee; }
     .write-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+    .pass-banner { font-size: 13px; line-height: 1.5; color: #5a4a10; background: #FFF8E1; border: 1px solid #F0DFA0; border-radius: 10px; padding: 9px 12px; margin-bottom: 12px; display: flex; gap: 8px; align-items: center; }
+    .pass-banner.open { background: #E8F5E9; border-color: #B7DDB9; color: #2e5d32; }
+    .pass-banner button { flex: none; margin-left: auto; border: 0; border-radius: 14px; background: #1B2D5B; color: #fff; padding: 6px 12px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .rest-card.locked { cursor: pointer; }
+    .rest-card.locked .blur { filter: blur(5px); user-select: none; -webkit-user-select: none; pointer-events: none; }
+    .rest-card.locked .rest-img { background: #e9ecf3; font-size: 28px; }
+    .pass-box input { width: 100%; padding: 12px; border: 1px solid #ccd; border-radius: 10px; font-size: 16px; letter-spacing: 1px; text-transform: uppercase; font-family: inherit; margin: 10px 0 4px; }
+    .pass-msg { min-height: 20px; font-size: 13px; color: #C0392B; margin-bottom: 4px; }
+    .gv-lock { background: #FFF8E1; border: 1px solid #F0DFA0; border-radius: 12px; padding: 12px 14px; margin: 12px 16px; display: flex; gap: 10px; align-items: center; font-size: 14px; line-height: 1.5; color: #5a4a10; }
+    .gv-lock button { flex: none; margin-left: auto; border: 0; border-radius: 14px; background: #1B2D5B; color: #fff; padding: 8px 14px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
+    .gv-blur { filter: blur(6px); user-select: none; -webkit-user-select: none; pointer-events: none; }
     .shop-note { font-size: 13px; color: #6b5a1e; background: #FFF8E1; border: 1px solid #F0DFA0; border-radius: 10px; padding: 9px 12px; margin-bottom: 10px; line-height: 1.5; }
     .shop-chips { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 10px; scrollbar-width: none; }
     .shop-chips::-webkit-scrollbar { display: none; }
@@ -272,6 +283,37 @@
   function defEmoji(type, p) { return type === 'hotel' ? hotelStars(p.stars) : (type === 'shop' ? '🛍️' : '🏛️'); }
 
   var $ = function (id) { return document.getElementById(id); };
+  // ===== 이용권(2주): 무료로 표시된 장소(free) 외에는 이용권 코드를 넣어야 내용이 보여요 =====
+  function passUntil() { try { return Number(localStorage.getItem('pm_pass_until') || 0); } catch (e) { return 0; } }
+  function isOpen() { return passUntil() > Date.now(); }
+  function isLocked(p) { return !p.free && !isOpen(); }
+  function deviceId() { var d = ''; try { d = localStorage.getItem('pm_dev') || ''; } catch (e) {} if (!d) { d = 'd' + Math.random().toString(36).slice(2, 12) + Date.now().toString(36); try { localStorage.setItem('pm_dev', d); } catch (e) {} } return d; }
+  var FAKE = { rest: ['가려진 맛집 이름입니다', '가려진 한국어 이름', '1인 000 RMB'], sight: ['가려진 관광지 이름입니다', '', '상하이시 가려진 주소 가려진 주소'], hotel: ['가려진 호텔 이름입니다', '', '가려진 가격 정보'], shop: ['가려진 상품 이름입니다', '', '000 RMB'] };
+  function lockedCard(type, p) {
+    var f = FAKE[type] || FAKE.rest;
+    return '<div class="rest-card locked" data-type="' + type + '" data-id="' + esc(p.id) + '" data-lock="1"><div class="rest-img">🔒</div><div class="rest-info"><div class="category-tag">🔒 이용권으로 열려요</div><div class="rest-name blur">' + f[0] + '</div>' + (f[1] ? '<div class="rest-name-sub blur">' + f[1] + '</div>' : '') + '<div class="rest-price blur">' + f[2] + '</div></div></div>';
+  }
+  function passBanner(type) {
+    var all = state.places[type] || [], free = all.filter(function (p) { return p.free; }).length, until = passUntil();
+    if (isOpen()) return '<div class="pass-banner open">✅ 이용권 사용 중 · ' + Math.max(1, Math.ceil((until - Date.now()) / 86400000)) + '일 남았어요</div>';
+    if (!all.length) return '';
+    return '<div class="pass-banner"><span>🔒 ' + (free ? '무료로 볼 수 있는 곳 ' + free + '곳 · ' : '') + '나머지는 이용권 코드로 <b>2주</b> 동안 열려요</span><button type="button" data-act="pass">코드 입력</button></div>';
+  }
+  function openPassModal() {
+    state.openItem = null; $('infoModal').style.zIndex = '1200'; $('modalTitle').textContent = '🔒 이용권 코드';
+    $('modalBody').innerHTML = '<div class="pass-box"><div style="font-size:15px;line-height:1.6">이용권 코드를 입력하면 <b>2주 동안</b> 모든 장소 정보가 열려요.</div><input id="passCode" type="text" placeholder="코드 입력 (예: PM-XXXX-XXXX)" autocomplete="off" autocapitalize="characters" maxlength="24"><div class="pass-msg" id="passMsg"></div><button class="book-btn" data-act="redeem" style="margin-top:4px">확인</button><button class="book-btn secondary" data-act="passAsk">이용권은 어디서 받나요? (카톡 문의)</button></div>';
+    $('infoModal').classList.add('show');
+  }
+  function redeem() {
+    var code = ($('passCode').value || '').trim(); if (!code) { $('passMsg').textContent = '코드를 입력해주세요'; return; }
+    if (!CONFIG.REVIEW_API_URL) { $('passMsg').textContent = '이용권 기능을 준비하고 있어요'; return; }
+    $('passMsg').style.color = '#666'; $('passMsg').textContent = '확인 중...';
+    fetch(CONFIG.REVIEW_API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'redeem', code: code, device: deviceId() }) })
+      .then(function (r) { return r.json(); }).then(function (res) {
+        if (res && res.ok && Number(res.expiresAt) > Date.now()) { try { localStorage.setItem('pm_pass_until', String(Number(res.expiresAt))); } catch (e) {} closeModal(); renderAll(); refreshWriteSelect(); toast('✅ 이용권이 열렸어요'); var gv = $('guideView'); if (gv && gv.classList.contains('show') && gv.dataset.gid) openGuide(gv.dataset.gid, true); if ($('guideList') && guides.data) renderGuideList(); }
+        else { $('passMsg').style.color = '#C0392B'; $('passMsg').textContent = (res && res.error) || '코드를 확인해주세요'; }
+      }).catch(function () { $('passMsg').style.color = '#C0392B'; $('passMsg').textContent = '연결에 실패했어요. 잠시 후 다시 시도해주세요'; });
+  }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function toast(msg) { var t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(function () { t.classList.remove('show'); }, 2600); }
   function stars(n) { n = Math.max(0, Math.min(5, Math.round(n))); return '★'.repeat(n) + '☆'.repeat(5 - n); }
@@ -361,6 +403,7 @@
 
   // ===== 목록 화면 =====
   function matches(type, p) {
+    if (isLocked(p) && (state.keyword || state.nearby)) return false;
     if (state.keyword) {
       var kw = state.keyword;
       var hay = [p.name, p.nameKr, p.address, p.cat, p.desc, type === 'hotel' ? (p.stars + '성급') : ''].join(' ').toLowerCase();
@@ -375,6 +418,7 @@
   }
 
   function card(type, p) {
+    if (isLocked(p)) return lockedCard(type, p);
     var cat = (type === 'shop' ? state.shopCats : state.categories).find(function (c) { return c.name === p.cat; }) || { emoji: type === 'shop' ? '🛍️' : '🍜' };
     var tag = (type === 'rest' || type === 'shop') ? cat.emoji + ' ' + esc(p.cat || (type === 'shop' ? '쇼핑' : '')) : (type === 'sight' ? '🏛️ 관광지' : '🏨 호텔');
     var avg = avgOf(type, p.id);
@@ -387,7 +431,8 @@
   function renderType(type, containerId) {
     var items = state.places[type].filter(function (p) { return matches(type, p) && (type !== 'shop' || !state.shopCat || p.cat === state.shopCat); });
     if (state.nearby) items.sort(function (a, b) { return a._d - b._d; });
-    $(containerId).innerHTML = items.length ? items.map(function (p) { return card(type, p); }).join('') : '<div class="empty">' + (state.keyword || state.nearby || state.shopCat ? (type === 'shop' ? '조건에 맞는 항목이 없어요' : '조건에 맞는 장소가 없어요') : (type === 'shop' ? '쇼핑 추천을 준비 중이에요. 곧 올릴게요!' : '등록된 장소가 없어요')) + '</div>';
+    else if (!isOpen()) items = items.filter(function (p) { return p.free; }).concat(items.filter(function (p) { return !p.free; }));
+    $(containerId).innerHTML = passBanner(type) + (items.length ? items.map(function (p) { return card(type, p); }).join('') : '<div class="empty">' + (state.keyword || state.nearby || state.shopCat ? (type === 'shop' ? '조건에 맞는 항목이 없어요' : '조건에 맞는 장소가 없어요') : (type === 'shop' ? '쇼핑 추천을 준비 중이에요. 곧 올릴게요!' : '등록된 장소가 없어요')) + '</div>');
   }
   function renderShopChips() {
     var all = [{ name: '', emoji: '🛍️', label: '전체' }].concat(state.shopCats.map(function (c) { return { name: c.name, emoji: c.emoji, label: c.name }; }));
@@ -466,7 +511,7 @@
     });
   }
 
-  function closeModal() { $('infoModal').classList.remove('show'); state.openItem = null; }
+  function closeModal() { $('infoModal').classList.remove('show'); $('infoModal').style.zIndex = ''; state.openItem = null; }
 
   // ===== 갤러리 =====
   function openGallery(list, index) { if (!list.length) return; state.gallery = list; state.gIndex = index || 0; drawGallery(); $('gallery').classList.add('show'); }
@@ -481,7 +526,8 @@
   // ===== 리뷰 쓰기 =====
   function refreshWriteSelect(selectedId) {
     var type = state.writeType;
-    $('writeSelect').innerHTML = state.places[type].map(function (p) { return '<option value="' + esc(p.id) + '">' + esc(p.nameKr || p.name) + '</option>'; }).join('');
+    var wl = state.places[type].filter(function (p) { return !isLocked(p); });
+    $('writeSelect').innerHTML = !wl.length ? '<option value="">이용권 코드를 입력하면 선택할 수 있어요</option>' : wl.map(function (p) { return '<option value="' + esc(p.id) + '">' + esc(p.nameKr || p.name) + '</option>'; }).join('');
     if (selectedId) $('writeSelect').value = selectedId;
     document.querySelectorAll('.write-tab-btn').forEach(function (b) { b.classList.toggle('active', b.dataset.write === type); });
   }
@@ -587,6 +633,20 @@
     var g = guides.data.guides.filter(function (x) { return x.id === id; })[0]; if (!g) return;
     var h = '<div class="gv-in"><div class="gv-top"><button type="button" id="gvBack">‹ 목록</button><span class="gv-t">' + esc(g.title) + '</span><span id="gvCount" style="font-size:12px"></span></div><div class="gv-bar"><i id="gvBar"></i></div>';
     h += '<div class="gv-head"><h2>' + ((g.iconImgs || []).length ? '<span class="gv-hic">' + g.iconImgs.map(safeUrl).filter(Boolean).map(function (u) { return '<img src="' + esc(u) + '" alt="">'; }).join('') + '</span>' : esc(g.icon || '') + ' ') + esc(g.title) + '</h2>' + chips(g) + '<p>' + md(g.why || '') + '</p><div class="gv-basis">' + esc(g.basis || '') + '</div></div>';
+    if (!g.free && !isOpen()) {
+      h = h.replace(/<p>[\s\S]*?<\/p><div class="gv-basis">[\s\S]*?<\/div>/, '<p class="gv-blur">가려진 안내 문장입니다. 이용권 코드를 입력하면 선명하게 보여요.</p>');
+      h += '<div class="gv-lock"><span>🔒 이 가이드는 이용권 코드로 <b>2주</b> 동안 열려요</span><button type="button" id="gvPass">코드 입력</button></div>';
+      var cnt = 0;
+      g.sections.forEach(function (sec) {
+        h += '<div class="gv-h3 gv-blur">가려진 단계 제목</div>';
+        (sec.steps || []).forEach(function () { cnt++; h += '<div class="gv-step gv-blur"><div class="gv-num">' + cnt + '</div><div class="gv-txt">가려진 안내 문장입니다. 이용권 코드를 입력하면 선명하게 보여요.<div class="gv-note">💡 가려진 설명 문장입니다. 가려진 설명 문장입니다.</div></div></div>'; });
+        if ((sec.bullets || []).length) h += '<ul class="gv-bul gv-blur"><li>가려진 안내 문장입니다.</li><li>가려진 안내 문장입니다.</li></ul>';
+      });
+      h += '<div class="gv-foot"><a class="btn" style="display:block;text-align:center;text-decoration:none;box-sizing:border-box" href="' + esc(CONFIG.KAKAO_URL || 'https://open.kakao.com/o/sYtvh9pi') + '" target="_blank" rel="noopener">💬 이용권 문의하기</a></div></div>';
+      var v0 = $('guideView'); v0.innerHTML = h; v0.dataset.gid = id; v0.classList.add('show'); v0.scrollTop = 0; document.body.style.overflow = 'hidden';
+      if (!noHash) { try { history.replaceState(null, '', '#guide/' + id); } catch (e) { location.hash = 'guide/' + id; } }
+      return;
+    }
     if ((g.links || []).length) h += '<div class="gv-foot" style="margin-top:12px">' + g.links.map(function (l) { var u = safeUrl(l.url); return u ? '<a class="btn" style="display:block;text-align:center;text-decoration:none;box-sizing:border-box" href="' + esc(u) + '" target="_blank" rel="noopener">🔗 ' + esc(l.label) + '</a>' : ''; }).join('') + '</div>';
     h += dlBox(g);
     if ((g.prep || []).length) h += '<div class="gv-box gv-prep"><h4>📋 먼저 준비하세요</h4><ul>' + g.prep.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>';
@@ -639,6 +699,7 @@
   $('guideView').addEventListener('click', function (e) {
     var t = e.target;
     if (t.closest('#gvBack')) { closeGuide(); return; }
+    if (t.closest('#gvPass')) { openPassModal(); return; }
     if (t.closest('#gvReset')) {
       var gid = this.dataset.gid; Object.keys(guides.done).forEach(function (k) { if (k.indexOf(gid + ':') === 0) delete guides.done[k]; }); saveDone(); openGuide(gid, true); return;
     }
@@ -666,11 +727,12 @@
   $('nearbyBtn').addEventListener('click', nearby);
   $('shopCats').addEventListener('click', function (e) { var b = e.target.closest('.shop-chip'); if (!b) return; state.shopCat = b.dataset.cat; renderAll(); });
   ['restaurantList', 'sightsList', 'hotelsList', 'shopList'].forEach(function (cid) {
-    $(cid).addEventListener('click', function (e) { var c = e.target.closest('.rest-card'); if (c) openDetail(c.dataset.type, c.dataset.id); });
+    $(cid).addEventListener('click', function (e) { if (e.target.closest('[data-act="pass"]')) { openPassModal(); return; } var c = e.target.closest('.rest-card'); if (c) { if (c.dataset.lock) openPassModal(); else openDetail(c.dataset.type, c.dataset.id); } });
   });
   $('modalClose').addEventListener('click', closeModal);
   $('infoModal').addEventListener('click', function (e) { if (e.target === this) closeModal(); });
   $('modalBody').addEventListener('click', function (e) {
+    var a0 = e.target.dataset.act; if (a0 === 'redeem') { redeem(); return; } if (a0 === 'passAsk') { window.open(CONFIG.KAKAO_URL, '_blank', 'noopener'); return; }
     var o = state.openItem; if (!o) return;
     if (e.target.id === 'modalPhoto') { openGallery(galleryFor(o.type, o.id), 0); return; }
     var im = e.target.closest('.review-img');
