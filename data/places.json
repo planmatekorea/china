@@ -318,5 +318,32 @@
    "oldId": "z0UZB6fRcJPBqGmRw5AM"
   }
  ],
- "logo": "img/logo.png"
+ "logo": "img/logo.png",
+ "shopCategories": [
+  {
+   "name": "기념품",
+   "emoji": "🎁"
+  },
+  {
+   "name": "화장품·뷰티",
+   "emoji": "💄"
+  },
+  {
+   "name": "차·식품",
+   "emoji": "🍵"
+  },
+  {
+   "name": "생활·잡화",
+   "emoji": "🧴"
+  },
+  {
+   "name": "패션",
+   "emoji": "👕"
+  },
+  {
+   "name": "전자·가전",
+   "emoji": "📱"
+  }
+ ],
+ "shops": []
 }

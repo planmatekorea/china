@@ -70,6 +70,11 @@
     .review-images { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
     .review-img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 1px solid #eee; }
     .write-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+    .shop-note { font-size: 13px; color: #6b5a1e; background: #FFF8E1; border: 1px solid #F0DFA0; border-radius: 10px; padding: 9px 12px; margin-bottom: 10px; line-height: 1.5; }
+    .shop-chips { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 10px; scrollbar-width: none; }
+    .shop-chips::-webkit-scrollbar { display: none; }
+    .shop-chip { flex: none; border: 1px solid #ddd; background: #fff; color: #444; border-radius: 16px; padding: 6px 12px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; white-space: nowrap; }
+    .shop-chip.on { background: #1B2D5B; color: #fff; border-color: #1B2D5B; }
     .write-tab-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; background: #f3f3f3; color: #888; font-family: inherit; }
     .write-tab-btn.active { background: #1B2D5B; color: white; }
     .field { width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 12px; border: 1px solid #ddd; font-size: 14px; font-family: inherit; background: white; }
@@ -194,6 +199,7 @@
     <button class="tab active" data-tab="list">🍜 맛집</button>
     <button class="tab" data-tab="sights">🏛️ 관광지</button>
     <button class="tab" data-tab="hotels">🏨 호텔</button>
+    <button class="tab" data-tab="shop">🛍️ 쇼핑</button>
     <button class="tab" data-tab="guide">📘 필수</button>
     <button class="tab" data-tab="write">✍️ 리뷰</button>
   </div>
@@ -201,6 +207,8 @@
   <div class="panel active" id="panel-list"><div id="guideBannerWrap" style="margin-bottom:14px"><button type="button" class="gd-card" id="guideBanner" style="margin-bottom:4px;background:#FFF8E1;border-color:#F0DFA0"><span class="gd-ico">✈️</span><span class="gd-body"><span class="gd-title">처음 오세요? 입국카드·결제 준비!</span><div class="gd-sub">출발 전에 끝내두면 도착해서 편해요</div></span><span class="gd-prog">보기 ›</span></button><div style="text-align:right"><button type="button" id="guideBannerOff" style="background:none;border:none;color:#888;font-size:12px;padding:4px 6px;cursor:pointer;font-family:inherit">✕ 다시 보지 않기</button></div></div><div id="restaurantList"></div></div>
   <div class="panel" id="panel-sights"><div id="sightsList"></div></div>
   <div class="panel" id="panel-hotels"><div id="hotelsList"></div></div>
+
+  <div class="panel" id="panel-shop"><div class="shop-note">🛍️ 상하이에서 살 만한 것들을 추천해요. 구매·배달 문의는 준비 중이에요.</div><div class="shop-chips" id="shopCats"></div><div id="shopList"></div></div>
 
   <div class="panel" id="panel-guide"><div id="guideList"></div></div>
 
@@ -210,6 +218,7 @@
       <button class="write-tab-btn active" data-write="rest">🍜 맛집</button>
       <button class="write-tab-btn" data-write="sight">🏛️ 관광지</button>
       <button class="write-tab-btn" data-write="hotel">🏨 호텔</button>
+      <button class="write-tab-btn" data-write="shop">🛍️ 쇼핑</button>
     </div>
     <select id="writeSelect" class="field" aria-label="리뷰 대상"></select>
     <select id="writeRating" class="field" aria-label="별점">
@@ -257,9 +266,10 @@
   }, window.PLANMATE_CONFIG || {});
 
   var MAX_PHOTOS = 3;
-  var state = { places: { rest: [], sight: [], hotel: [] }, categories: [], logo: '', reviews: [], keyword: '', nearby: null, writeType: 'rest', photos: [], gallery: [], gIndex: 0, sending: false };
-  var TYPE_KEY = { rest: 'restaurants', sight: 'sights', hotel: 'hotels' };
-  var TYPE_LABEL = { rest: '맛집', sight: '관광지', hotel: '호텔' };
+  var state = { places: { rest: [], sight: [], hotel: [], shop: [] }, categories: [], shopCats: [], shopCat: '', logo: '', reviews: [], keyword: '', nearby: null, writeType: 'rest', photos: [], gallery: [], gIndex: 0, sending: false };
+  var TYPE_KEY = { rest: 'restaurants', sight: 'sights', hotel: 'hotels', shop: 'shops' };
+  var TYPE_LABEL = { rest: '맛집', sight: '관광지', hotel: '호텔', shop: '쇼핑' };
+  function defEmoji(type, p) { return type === 'hotel' ? hotelStars(p.stars) : (type === 'shop' ? '🛍️' : '🏛️'); }
 
   var $ = function (id) { return document.getElementById(id); };
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -280,6 +290,8 @@
       state.places.rest = p.restaurants || [];
       state.places.sight = p.sights || [];
       state.places.hotel = p.hotels || [];
+      state.places.shop = p.shops || [];
+      state.shopCats = p.shopCategories || [];
       state.logo = p.logo || '';
       if (state.logo) $('headerLogo').src = state.logo;
       state.legacy = res[1].map(function (r) { return { id: 'legacy-' + r.id, type: r.type, targetId: r.placeId, rating: r.rating, text: r.text, nickname: '', date: r.date, images: r.images || [] }; });
@@ -290,7 +302,7 @@
       loadSheetReviews();
     }).catch(function (e) {
       console.error(e);
-      ['restaurantList', 'sightsList', 'hotelsList'].forEach(function (id) { $(id).innerHTML = '<div class="empty">데이터를 불러오지 못했어요. 잠시 후 다시 시도해주세요.</div>'; });
+      ['restaurantList', 'sightsList', 'hotelsList', 'shopList'].forEach(function (id) { $(id).innerHTML = '<div class="empty">데이터를 불러오지 못했어요. 잠시 후 다시 시도해주세요.</div>'; });
     });
   }
 
@@ -309,7 +321,7 @@
 
   function applySheetPlaces(list) {
     if (!Array.isArray(list)) return;
-    var added = { rest: [], sight: [], hotel: [] };
+    var added = { rest: [], sight: [], hotel: [], shop: [] };
     list.forEach(function (r) {
       if (!r || !added[r.type] || !/^[a-z]+[0-9]{1,4}$/.test(String(r.id))) return;
       var p = {
@@ -320,6 +332,7 @@
       if (typeof r.lat === 'number' && typeof r.lng === 'number') { p.lat = r.lat; p.lng = r.lng; }
       if (!p.name) return;
       added[r.type].push(p);
+      if (r.type === 'shop' && p.cat && !state.shopCats.some(function (c) { return c.name === p.cat; })) state.shopCats.push({ name: p.cat, emoji: p.emoji || '🛍️' });
       if (r.type === 'rest' && p.cat && !state.categories.some(function (c) { return c.name === p.cat; })) state.categories.push({ name: p.cat, emoji: p.emoji || '🍜' });
     });
     Object.keys(added).forEach(function (t) {
@@ -362,21 +375,25 @@
   }
 
   function card(type, p) {
-    var cat = state.categories.find(function (c) { return c.name === p.cat; }) || { emoji: '🍜' };
-    var tag = type === 'rest' ? cat.emoji + ' ' + esc(p.cat) : (type === 'sight' ? '🏛️ 관광지' : '🏨 호텔');
+    var cat = (type === 'shop' ? state.shopCats : state.categories).find(function (c) { return c.name === p.cat; }) || { emoji: type === 'shop' ? '🛍️' : '🍜' };
+    var tag = (type === 'rest' || type === 'shop') ? cat.emoji + ' ' + esc(p.cat || (type === 'shop' ? '쇼핑' : '')) : (type === 'sight' ? '🏛️ 관광지' : '🏨 호텔');
     var avg = avgOf(type, p.id);
-    var thumb = p.image ? '<img src="' + esc(safeUrl(p.image)) + '" alt="" loading="lazy">' : esc(p.emoji || (type === 'hotel' ? hotelStars(p.stars) : '🏛️'));
-    var sub = type === 'rest' ? '<div class="rest-name-sub">' + esc(p.nameKr || '') + '</div>' : '';
+    var thumb = p.image ? '<img src="' + esc(safeUrl(p.image)) + '" alt="" loading="lazy">' : esc(p.emoji || defEmoji(type, p));
+    var sub = (type === 'rest' || type === 'shop') ? '<div class="rest-name-sub">' + esc(p.nameKr || '') + '</div>' : '';
     var line = type === 'sight' ? (p.address ? esc(p.address.slice(0, 30)) + '...' : '') : esc(p.price || '');
     return '<div class="rest-card" data-type="' + type + '" data-id="' + esc(p.id) + '"><div class="rest-img">' + thumb + '</div><div class="rest-info"><div class="category-tag">' + tag + '</div><div class="rest-name">' + esc(p.name) + '</div>' + sub + (avg ? '<div class="stars">★ ' + avg + '</div>' : '') + '<div class="price">' + line + '</div>' + (p._d !== undefined ? '<div class="distance">📍 ' + p._d.toFixed(1) + 'km</div>' : '') + '</div></div>';
   }
 
   function renderType(type, containerId) {
-    var items = state.places[type].filter(function (p) { return matches(type, p); });
+    var items = state.places[type].filter(function (p) { return matches(type, p) && (type !== 'shop' || !state.shopCat || p.cat === state.shopCat); });
     if (state.nearby) items.sort(function (a, b) { return a._d - b._d; });
-    $(containerId).innerHTML = items.length ? items.map(function (p) { return card(type, p); }).join('') : '<div class="empty">' + (state.keyword || state.nearby ? '조건에 맞는 장소가 없어요' : '등록된 장소가 없어요') + '</div>';
+    $(containerId).innerHTML = items.length ? items.map(function (p) { return card(type, p); }).join('') : '<div class="empty">' + (state.keyword || state.nearby || state.shopCat ? (type === 'shop' ? '조건에 맞는 항목이 없어요' : '조건에 맞는 장소가 없어요') : (type === 'shop' ? '쇼핑 추천을 준비 중이에요. 곧 올릴게요!' : '등록된 장소가 없어요')) + '</div>';
   }
-  function renderAll() { renderType('rest', 'restaurantList'); renderType('sight', 'sightsList'); renderType('hotel', 'hotelsList'); if ($('infoModal').classList.contains('show') && state.openItem) renderModalReviews(); }
+  function renderShopChips() {
+    var all = [{ name: '', emoji: '🛍️', label: '전체' }].concat(state.shopCats.map(function (c) { return { name: c.name, emoji: c.emoji, label: c.name }; }));
+    $('shopCats').innerHTML = all.map(function (c) { return '<button type="button" class="shop-chip' + (state.shopCat === c.name ? ' on' : '') + '" data-cat="' + esc(c.name) + '">' + esc(c.emoji) + ' ' + esc(c.label) + '</button>'; }).join('');
+  }
+  function renderAll() { renderType('rest', 'restaurantList'); renderType('sight', 'sightsList'); renderType('hotel', 'hotelsList'); renderShopChips(); renderType('shop', 'shopList'); if ($('infoModal').classList.contains('show') && state.openItem) renderModalReviews(); }
 
   // ===== 상세 모달 =====
   function mapLinks(addr) {
@@ -388,17 +405,18 @@
     var p = state.places[type].find(function (x) { return x.id === id; });
     if (!p) return;
     state.openItem = { type: type, id: id };
-    var cat = state.categories.find(function (c) { return c.name === p.cat; });
-    var head = p.image ? '<img class="modal-photo" id="modalPhoto" src="' + esc(safeUrl(p.image)) + '" alt="">' : '<div class="modal-emoji">' + esc(p.emoji || (type === 'hotel' ? hotelStars(p.stars) : '🏛️')) + '</div>';
+    var cat = (type === 'shop' ? state.shopCats : state.categories).find(function (c) { return c.name === p.cat; });
+    var head = p.image ? '<img class="modal-photo" id="modalPhoto" src="' + esc(safeUrl(p.image)) + '" alt="">' : '<div class="modal-emoji">' + esc(p.emoji || defEmoji(type, p)) + '</div>';
     var rows = '';
     if (type === 'hotel') rows += '<div class="modal-info-row"><span class="icon">⭐</span> ' + (p.stars > 0 ? p.stars + '성급 호텔' : '호텔') + '</div>';
-    rows += '<div class="modal-info-row" style="align-items:flex-start"><span class="icon">📍</span><span style="flex:1;min-width:0;word-break:break-word">' + (p.address ? esc(p.address) + '<br>' + mapLinks(p.address) : '주소 없음') + '</span></div>';
-    if (type !== 'sight' || p.phone) rows += '<div class="modal-info-row"><span class="icon">📞</span> ' + esc(p.phone || '번호 없음') + (p.phone ? ' <a class="call" href="tel:' + esc(p.phone.replace(/[^0-9+]/g, '')) + '">전화걸기</a>' : '') + '</div>';
+    if (type !== 'shop' || p.address) rows += '<div class="modal-info-row" style="align-items:flex-start"><span class="icon">📍</span><span style="flex:1;min-width:0;word-break:break-word">' + (p.address ? esc(p.address) + '<br>' + mapLinks(p.address) : '주소 없음') + '</span></div>';
+    if ((type !== 'sight' && type !== 'shop') || p.phone) rows += '<div class="modal-info-row"><span class="icon">📞</span> ' + esc(p.phone || '번호 없음') + (p.phone ? ' <a class="call" href="tel:' + esc(p.phone.replace(/[^0-9+]/g, '')) + '">전화걸기</a>' : '') + '</div>';
     if (p.price) rows += '<div class="modal-info-row"><span class="icon">💰</span> ' + esc(p.price) + '</div>';
     if (p.hours) rows += '<div class="modal-info-row"><span class="icon">🕒</span> ' + esc(p.hours) + '</div>';
-    if (type === 'rest') rows += '<div class="modal-info-row"><span class="icon">🏷️</span> ' + ((cat && cat.emoji) || '🍜') + ' ' + esc(p.cat || '') + '</div>';
+    if (type === 'rest' || (type === 'shop' && p.cat)) rows += '<div class="modal-info-row"><span class="icon">🏷️</span> ' + ((cat && cat.emoji) || (type === 'shop' ? '🛍️' : '🍜')) + ' ' + esc(p.cat || '') + '</div>';
     var buttons = '';
-    if (type !== 'sight') buttons += '<button class="book-btn" disabled>예약 문의하기는 준비중이에요</button>';
+    if (type === 'shop') buttons += '<button class="book-btn" disabled>구매·배달 문의는 준비중이에요</button>';
+    else if (type !== 'sight') buttons += '<button class="book-btn" disabled>예약 문의하기는 준비중이에요</button>';
     if (CONFIG.CAFE_URL) buttons += '<button class="book-btn secondary" data-act="cafe">카페에서 후기 더 보기</button>';
     $('modalTitle').textContent = TYPE_LABEL[type] + ' 상세';
     $('modalBody').innerHTML = head + '<div class="modal-name">' + esc(p.name) + '</div>' + (p.nameKr ? '<div class="modal-name" style="font-size:16px;">' + esc(p.nameKr) + '</div>' : '') + '<div class="modal-desc">' + esc(p.desc || '') + '</div>' + rows + buttons +
@@ -510,7 +528,7 @@
   }
 
   // ===== 검색 / 내 주변 =====
-  function activeType() { var t = document.querySelector('.tab.active').dataset.tab; return t === 'list' ? 'rest' : (t === 'sights' ? 'sight' : (t === 'hotels' ? 'hotel' : null)); }
+  function activeType() { var t = document.querySelector('.tab.active').dataset.tab; return t === 'list' ? 'rest' : (t === 'sights' ? 'sight' : (t === 'hotels' ? 'hotel' : (t === 'shop' ? 'shop' : null))); }
   function nearby() {
     var any = ['rest', 'sight', 'hotel'].some(function (t) { return state.places[t].some(function (p) { return typeof p.lat === 'number' && typeof p.lng === 'number'; }); });
     if (!any) { toast('아직 위치가 등록된 장소가 없어요'); return; }
@@ -646,7 +664,8 @@
   $('searchInput').addEventListener('input', function () { state.keyword = this.value.trim().toLowerCase(); renderAll(); });
   $('searchClearBtn').addEventListener('click', function () { $('searchInput').value = ''; state.keyword = ''; state.nearby = null; renderAll(); });
   $('nearbyBtn').addEventListener('click', nearby);
-  ['restaurantList', 'sightsList', 'hotelsList'].forEach(function (cid) {
+  $('shopCats').addEventListener('click', function (e) { var b = e.target.closest('.shop-chip'); if (!b) return; state.shopCat = b.dataset.cat; renderAll(); });
+  ['restaurantList', 'sightsList', 'hotelsList', 'shopList'].forEach(function (cid) {
     $(cid).addEventListener('click', function (e) { var c = e.target.closest('.rest-card'); if (c) openDetail(c.dataset.type, c.dataset.id); });
   });
   $('modalClose').addEventListener('click', closeModal);

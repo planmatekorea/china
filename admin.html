@@ -64,6 +64,7 @@
         <button type="button" data-type="rest" class="on">🍜 맛집</button>
         <button type="button" data-type="sight">🏛️ 관광지</button>
         <button type="button" data-type="hotel">🏨 호텔</button>
+        <button type="button" data-type="shop">🛍️ 쇼핑</button>
       </div>
 
       <div id="catRow">
@@ -169,14 +170,14 @@
   function setType(t) {
     type = t;
     Array.prototype.forEach.call($('typeSeg').children, function (b) { b.classList.toggle('on', b.getAttribute('data-type') === t); });
-    $('catRow').classList.toggle('hidden', t !== 'rest');
+    $('catRow').classList.toggle('hidden', t !== 'rest' && t !== 'shop');
     $('starsRow').classList.toggle('hidden', t !== 'hotel');
   }
   $('typeSeg').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) setType(b.getAttribute('data-type')); });
 
   // ----- 분류 목록(기존 분류) 불러와서 이모지 자동 입력 -----
   fetch('data/places.json').then(function (r) { return r.json(); }).then(function (d) {
-    cats = d.categories || [];
+    cats = (d.categories || []).concat(d.shopCategories || []);
     $('catList').innerHTML = cats.map(function (c) { return '<option value="' + String(c.name).replace(/"/g, '&quot;') + '"></option>'; }).join('');
   }).catch(function () {});
   $('cat').addEventListener('input', function () {
@@ -240,7 +241,7 @@
       for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
       var d = JSON.parse(new TextDecoder('utf-8').decode(bytes));
       if (!d || typeof d !== 'object') return;
-      if (['rest', 'sight', 'hotel'].indexOf(d.type) >= 0) setType(d.type);
+      if (['rest', 'sight', 'hotel', 'shop'].indexOf(d.type) >= 0) setType(d.type);
       ['cat', 'emoji', 'name', 'nameKr', 'address', 'price', 'hours', 'phone', 'desc', 'lat', 'lng'].forEach(function (k) {
         if (typeof d[k] === 'string' || typeof d[k] === 'number') $(k).value = String(d[k]).slice(0, Number($(k).getAttribute('maxlength')) || 500);
       });
