@@ -61,6 +61,7 @@
     .map-btn { background: #f0f0f0; padding: 4px 10px; border-radius: 20px; font-size: 12px; text-decoration: none; color: #1B2D5B; cursor: pointer; }
     .call { margin-left: 8px; background: #34c759; color: white; padding: 4px 12px; border-radius: 20px; text-decoration: none; font-size: 12px; }
     .book-btn { background: #1B2D5B; color: white; border: none; padding: 12px; border-radius: 12px; width: 100%; margin-top: 16px; font-weight: 700; cursor: pointer; font-family: inherit; font-size: 14px; }
+    .book-btn:disabled { background: #d9dce3; color: #7b8190; cursor: default; }
     .book-btn.secondary { background: #F5EDD4; color: #1B2D5B; margin-top: 8px; }
     .review-card { background: #f9f9f9; padding: 12px; border-radius: 12px; margin-bottom: 12px; }
     .review-stars { color: #C9A84C; font-size: 12px; margin-bottom: 4px; }
@@ -397,7 +398,7 @@
     if (p.hours) rows += '<div class="modal-info-row"><span class="icon">🕒</span> ' + esc(p.hours) + '</div>';
     if (type === 'rest') rows += '<div class="modal-info-row"><span class="icon">🏷️</span> ' + ((cat && cat.emoji) || '🍜') + ' ' + esc(p.cat || '') + '</div>';
     var buttons = '';
-    if (type !== 'sight') buttons += '<button class="book-btn" data-act="kakao">예약 문의하기</button>';
+    if (type !== 'sight') buttons += '<button class="book-btn" disabled>예약 문의하기는 준비중이에요</button>';
     if (CONFIG.CAFE_URL) buttons += '<button class="book-btn secondary" data-act="cafe">카페에서 후기 더 보기</button>';
     $('modalTitle').textContent = TYPE_LABEL[type] + ' 상세';
     $('modalBody').innerHTML = head + '<div class="modal-name">' + esc(p.name) + '</div>' + (p.nameKr ? '<div class="modal-name" style="font-size:16px;">' + esc(p.nameKr) + '</div>' : '') + '<div class="modal-desc">' + esc(p.desc || '') + '</div>' + rows + buttons +
