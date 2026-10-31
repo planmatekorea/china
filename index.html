@@ -197,7 +197,7 @@
     <button class="tab" data-tab="write">✍️ 리뷰</button>
   </div>
 
-  <div class="panel active" id="panel-list"><button type="button" class="gd-card" id="guideBanner" style="background:#FFF8E1;border-color:#F0DFA0"><span class="gd-ico">🇨🇳</span><span class="gd-body"><span class="gd-title">처음 오세요? 입국카드·결제 준비!</span><div class="gd-sub">출발 전에 끝내두면 도착해서 편해요</div></span><span class="gd-prog">보기 ›</span></button><div id="restaurantList"></div></div>
+  <div class="panel active" id="panel-list"><div id="guideBannerWrap" style="margin-bottom:14px"><button type="button" class="gd-card" id="guideBanner" style="margin-bottom:4px;background:#FFF8E1;border-color:#F0DFA0"><span class="gd-ico">✈️</span><span class="gd-body"><span class="gd-title">처음 오세요? 입국카드·결제 준비!</span><div class="gd-sub">출발 전에 끝내두면 도착해서 편해요</div></span><span class="gd-prog">보기 ›</span></button><div style="text-align:right"><button type="button" id="guideBannerOff" style="background:none;border:none;color:#888;font-size:12px;padding:4px 6px;cursor:pointer;font-family:inherit">✕ 다시 보지 않기</button></div></div><div id="restaurantList"></div></div>
   <div class="panel" id="panel-sights"><div id="sightsList"></div></div>
   <div class="panel" id="panel-hotels"><div id="hotelsList"></div></div>
 
@@ -557,7 +557,8 @@
     });
     if ((d.soon || []).length) h += '<div class="gd-soon">곧 추가돼요<br>' + d.soon.map(esc).join(' · ') + '</div>';
     h += '<a class="btn gd-help" style="display:block;text-align:center;text-decoration:none;box-sizing:border-box" href="' + esc(CONFIG.KAKAO_URL || 'https://open.kakao.com/o/sYtvh9pi') + '" target="_blank" rel="noopener">💬 막히면 카톡으로 물어보기</a>';
-    box.innerHTML = h;
+    h += '<div style="text-align:center;margin-top:10px"><button type="button" id="guideBannerBack" style="background:none;border:none;color:#888;font-size:12px;text-decoration:underline;cursor:pointer;font-family:inherit;display:none">맛집 화면 안내 다시 보이기</button></div>';
+    box.innerHTML = h; applyBanner();
   }
   function loadGuides() {
     return fetchJson('data/guides.json?v=' + encodeURIComponent(CONFIG.DATA_VERSION)).then(function (d) { guides.data = d; renderGuideList(); routeHash(); }).catch(function () { $('guideList').innerHTML = '<div class="empty">가이드를 불러오지 못했어요. 인터넷을 확인해주세요.</div>'; });
@@ -608,8 +609,14 @@
     showGuideTab(); window.scrollTo(0, 0);
     if (m[1]) openGuide(m[1], true);
   }
+
+  // 맛집 화면 안내 배너: 다시 보지 않기
+  function bannerOff() { try { return localStorage.getItem('pm_banner_off') === '1'; } catch (e) { return false; } }
+  function applyBanner() { $('guideBannerWrap').style.display = bannerOff() ? 'none' : ''; var b = $('guideBannerBack'); if (b) b.style.display = bannerOff() ? '' : 'none'; }
+  $('guideBannerOff').addEventListener('click', function () { try { localStorage.setItem('pm_banner_off', '1'); } catch (e) {} applyBanner(); toast('안내를 숨겼어요. 필수 탭에서 다시 켤 수 있어요'); });
+  applyBanner();
   $('guideBanner').addEventListener('click', function () { showGuideTab(); window.scrollTo(0, 0); });
-  $('guideList').addEventListener('click', function (e) { var c = e.target.closest('.gd-card'); if (c && c.dataset.gid) openGuide(c.dataset.gid); });
+  $('guideList').addEventListener('click', function (e) { if (e.target.id === 'guideBannerBack') { try { localStorage.removeItem('pm_banner_off'); } catch (x) {} applyBanner(); toast('다시 보이게 했어요'); return; } var c = e.target.closest('.gd-card'); if (c && c.dataset.gid) openGuide(c.dataset.gid); });
   $('guideView').addEventListener('click', function (e) {
     var t = e.target;
     if (t.closest('#gvBack')) { closeGuide(); return; }
