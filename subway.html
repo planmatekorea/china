@@ -11,6 +11,12 @@
   .top { position: fixed; top: 0; left: 0; right: 0; z-index: 10; background: #1B2D5B; color: #fff; padding: 8px 10px 6px; }
   .row1 { display: flex; align-items: center; gap: 8px; }
   .row1 a { color: #fff; text-decoration: none; background: rgba(255,255,255,.18); border-radius: 18px; padding: 6px 12px; font-size: 13px; white-space: nowrap; }
+  .row1 .kb { flex: none; border: 2px solid rgba(255,255,255,.7); background: transparent; color: #fff; border-radius: 18px; padding: 5px 11px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .row1 .kb.on { background: #FFD400; color: #222; border-color: #FFD400; }
+  .regs { display: flex; gap: 6px; overflow-x: auto; padding: 6px 0 2px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .regs::-webkit-scrollbar { display: none; }
+  .reg { flex: none; border: 0; border-radius: 16px; background: #fff; color: #1B2D5B; font-size: 13px; font-weight: 700; padding: 6px 12px; cursor: pointer; font-family: inherit; white-space: nowrap; }
+  .reg.on { background: #C9A84C; }
   .row1 input { flex: 1; min-width: 0; border: 0; border-radius: 18px; padding: 8px 12px; font-size: 14px; outline: none; font-family: inherit; }
   .chips { display: flex; gap: 5px; overflow-x: auto; padding: 7px 0 2px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .chips::-webkit-scrollbar { display: none; }
@@ -23,18 +29,16 @@
   .st { fill: #fff; stroke: #333; stroke-width: calc(var(--sr, 3) * .38); cursor: pointer; }
   .st.x { stroke-width: calc(var(--sr, 3) * .5); }
   .st.hl { fill: #FFD400; stroke: #000; }
-  .lb { font-size: 9px; paint-order: stroke; stroke: #fff; stroke-width: 2.6px; stroke-linejoin: round; pointer-events: none; fill: #111; }
+  .lb { font-size: var(--fs, 11px); paint-order: stroke; stroke: #fff; stroke-width: calc(var(--fs, 11px) * .28); stroke-linejoin: round; pointer-events: none; fill: #111; transform: translate(calc(var(--fs, 11px) * .6), calc(var(--fs, 11px) * -.3)); }
   .lb .zh { font-weight: 700; }
-  .lb .en { font-size: 6.5px; fill: #555; font-weight: 500; }
-  .lb .ko { font-size: 7.4px; fill: #C0392B; font-weight: 700; }
+  .lb .en { font-size: .78em; fill: #555; font-weight: 500; }
+  .lb .ko { font-size: .86em; fill: #C0392B; font-weight: 700; }
   .lb { display: none; }
+  .lb .en, .lb .ko { display: none; }
   svg[data-z="1"] .lb.M, svg[data-z="2"] .lb.M, svg[data-z="3"] .lb { display: block; }
-  svg[data-z="2"] .lb:not(.M), svg[data-z="3"] .lb:not(.M) { display: block; }
-  svg[data-z="1"] .lb .en, svg[data-z="1"] .lb:not(.M) { }
-  svg[data-z="1"] .lb .en { display: none; }
-  svg[data-z="2"] .lb.M .en { display: none; }
-  svg[data-z="2"] .lb:not(.M) .en, svg[data-z="2"] .lb:not(.M) .ko { display: none; }
-  svg[data-z="1"] .lb:not(.M) { display: none; }
+  svg[data-z="2"] .lb.M .en, svg[data-z="3"] .lb .en { display: inline; }
+  svg.ko[data-z="1"] .lb.M .ko, svg.ko[data-z="2"] .lb.M .ko, svg.ko[data-z="3"] .lb .ko { display: inline; }
+  .lb.M tspan.en, .lb.M tspan.ko { }
   .btns { position: fixed; right: 10px; bottom: calc(112px + env(safe-area-inset-bottom)); z-index: 9; display: flex; flex-direction: column; gap: 6px; }
   .btns button { width: 40px; height: 40px; border-radius: 10px; border: 1px solid #ccd; background: #fff; font-size: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.2); cursor: pointer; font-family: inherit; padding: 0; }
   .btns button.t { font-size: 11px; font-weight: 700; color: #1B2D5B; }
@@ -48,20 +52,21 @@
   #sheet .ls { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
   #sheet .ls span { border-radius: 14px; padding: 4px 11px; font-size: 13px; font-weight: 800; }
   #sheet .hint { margin-top: 10px; font-size: 12px; color: #777; line-height: 1.5; }
-  #res { position: fixed; top: 84px; left: 10px; right: 10px; z-index: 15; background: #fff; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.25); max-height: 48vh; overflow: auto; display: none; }
+  #res { position: fixed; top: 120px; left: 10px; right: 10px; z-index: 15; background: #fff; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,.25); max-height: 48vh; overflow: auto; display: none; }
   #res button { display: block; width: 100%; text-align: left; border: 0; border-bottom: 1px solid #eee; background: #fff; padding: 10px 14px; font-size: 14px; cursor: pointer; font-family: inherit; }
   #res small { color: #888; margin-left: 6px; }
 </style>
 </head>
 <body>
 <div class="top">
-  <div class="row1"><a href="index.html#guide">‹ 필수정보</a><input id="q" type="search" placeholder="역 검색 (한국어·중국어·English)" autocomplete="off"></div>
+  <div class="row1"><a href="index.html#guide">‹ 필수정보</a><input id="q" type="search" placeholder="역 검색" autocomplete="off"><button class="kb" id="kb" type="button">한국어</button></div>
+  <div class="regs" id="regs"></div>
   <div class="chips" id="chips"></div>
 </div>
 <div id="res"></div>
 <div id="wrap"><svg id="map" data-z="1" xmlns="http://www.w3.org/2000/svg"></svg></div>
 <div class="btns"><button id="zin" aria-label="확대">＋</button><button id="zout" aria-label="축소">－</button><button class="t" id="zc">도심</button><button class="t" id="za">전체</button></div>
-<div class="note">개략도예요. 실제 위치·거리와 달라요. 주요 역만 표시했어요 (역을 누르면 정보). 2026.10 기준 1~18호선·푸장선·자기부상. 환승·시간표는 고덕/바이두 앱으로 꼭 확인하세요.</div>
+<div class="note">개략도예요. 실제 위치·거리와 달라요. 주요 역만 표시했어요 (위 구역 버튼으로 확대, 역을 누르면 정보). 2026.10 기준 1~18호선·푸장선·자기부상. 환승·시간표는 고덕/바이두 앱으로 꼭 확인하세요.</div>
 <div id="sheet"><button class="x" id="sx" aria-label="닫기">×</button><h3 id="s1"></h3><div class="en" id="s2"></div><div class="ko" id="s3"></div><div class="ls" id="s4"></div><div class="hint" id="s5"></div></div>
 <script>
 (function () {
@@ -86,10 +91,10 @@ D.stations.forEach(function (s, i) {
   var x = s.lines.length > 1;
   var c = el('circle', { cx: s.x, cy: s.y, r: x ? 4.4 : 3.2, 'class': 'st' + (x ? ' x' : ''), 'data-s': i }, gS);
   stEls.push(c);
-  var t = el('text', { x: s.x + 6, y: s.y - 3, 'class': 'lb' + (s.major ? ' M' : '') }, gT);
+  var t = el('text', { x: s.x, y: s.y, 'class': 'lb' + (s.major ? ' M' : '') }, gT);
   var a = el('tspan', { 'class': 'zh' }, t); a.textContent = s.zh;
-  if (s.en) { var b = el('tspan', { 'class': 'en', x: s.x + 6, dy: 7 }, t); b.textContent = s.en; }
-  if (s.ko) { var k = el('tspan', { 'class': 'ko', x: s.x + 6, dy: 8 }, t); k.textContent = s.ko; }
+  if (s.en) { var b = el('tspan', { 'class': 'en', x: s.x, dy: '1.05em' }, t); b.textContent = s.en; }
+  if (s.ko) { var k = el('tspan', { 'class': 'ko', x: s.x, dy: '1.05em' }, t); k.textContent = s.ko; }
 });
 
 // chips
@@ -115,12 +120,14 @@ function apply() {
   var upp = vb.w / W();
   var lw = Math.max(2.4, 1.7 * upp), sr = Math.max(1, 1.0 * upp);
   svg.style.setProperty('--lw', lw.toFixed(2));
+  svg.style.setProperty('--fs', (11.5 * upp).toFixed(2) + 'px');
   svg.style.setProperty('--sr', Math.max(3, 2.2 * upp).toFixed(2));
-  svg.dataset.z = upp >= 3.4 ? '0' : (upp >= 1.25 ? '1' : (upp >= 0.5 ? '2' : '3'));
+  svg.dataset.z = upp >= 3.4 ? '0' : (upp >= 1.6 ? '1' : (upp >= 0.8 ? '2' : '3'));
 }
 function bounds() { var xs = D.stations.map(function (s) { return s.x; }), ys = D.stations.map(function (s) { return s.y; }); return [Math.min.apply(0, xs) - 60, Math.min.apply(0, ys) - 60, Math.max.apply(0, xs) + 60, Math.max.apply(0, ys) + 60]; }
-function fit(b) { var w = b[2] - b[0], h = b[3] - b[1]; var vw = Math.max(w, h * W() / H()); vb.w = vw; vb.x = (b[0] + b[2]) / 2 - vw / 2; vb.y = (b[1] + b[3]) / 2 - vw * H() / W() / 2; apply(); }
-function center(x, y, w) { vb.w = w; vb.x = x - w / 2; vb.y = y - w * H() / W() / 2; apply(); }
+function insets() { var tp = document.querySelector('.top'), nt = document.querySelector('.note'); return [tp ? tp.offsetHeight : 0, nt ? nt.offsetHeight : 0]; }
+function fit(b) { var ins = insets(), Hv = Math.max(H() - ins[0] - ins[1], 200); var w = b[2] - b[0], h = b[3] - b[1]; var vw = Math.max(w, h * W() / Hv, 280); var upp = vw / W(); vb.w = vw; vb.x = (b[0] + b[2]) / 2 - vw / 2; vb.y = (b[1] + b[3]) / 2 - Hv * upp / 2 - ins[0] * upp; apply(); }
+function center(x, y, w) { var ins = insets(), Hv = Math.max(H() - ins[0] - ins[1], 200), upp = w / W(); vb.w = w; vb.x = x - w / 2; vb.y = y - Hv * upp / 2 - ins[0] * upp; apply(); }
 function zoomAt(cx, cy, f) { // cx,cy in svg units
   var nw = Math.min(Math.max(vb.w * f, 60), 3200);
   var r = nw / vb.w; vb.x = cx - (cx - vb.x) * r; vb.y = cy - (cy - vb.y) * r; vb.w = nw; apply();
@@ -153,7 +160,7 @@ function show(i) {
   cur = i; var s = D.stations[i];
   stEls.forEach(function (c) { c.classList.remove('hl'); }); stEls[i].classList.add('hl');
   document.getElementById('s1').textContent = s.zh; document.getElementById('s2').textContent = s.en;
-  var k = document.getElementById('s3'); k.textContent = s.ko; k.style.display = s.ko ? '' : 'none';
+  var k = document.getElementById('s3'); k.textContent = s.ko; k.style.display = (s.ko && koOn) ? '' : 'none';
   var ls = document.getElementById('s4'); ls.innerHTML = '';
   s.lines.forEach(function (id) { var sp = document.createElement('span'); sp.textContent = lname(id); sp.style.background = D.colors[id]; sp.style.color = fg(D.colors[id]); ls.appendChild(sp); });
   document.getElementById('s5').textContent = s.lines.length > 1 ? '환승역: ' + s.lines.map(lname).join(' ↔ ') : '';
@@ -164,9 +171,34 @@ document.getElementById('sx').addEventListener('click', closeSheet);
 // buttons
 document.getElementById('zin').addEventListener('click', function () { zoomAt(vb.x + vb.w / 2, vb.y + vb.w * H() / W() / 2, 0.6); });
 document.getElementById('zout').addEventListener('click', function () { zoomAt(vb.x + vb.w / 2, vb.y + vb.w * H() / W() / 2, 1.6); });
-function home() { var p = D.stations.filter(function (s) { return s.zh === '人民广场'; })[0]; center(p.x, p.y, 560); }
+function home() { var p = D.stations.filter(function (s) { return s.zh === '人民广场'; })[0]; center(p.x, p.y, 640); }
 document.getElementById('zc').addEventListener('click', home);
 document.getElementById('za').addEventListener('click', function () { fit(bounds()); });
+
+// 한국어 표시 버튼
+var koOn = false; try { koOn = localStorage.getItem('pm_sw_ko') === '1'; } catch (e) {}
+var kb = document.getElementById('kb');
+function applyKo() { svg.classList.toggle('ko', koOn); kb.classList.toggle('on', koOn); kb.textContent = koOn ? '한국어 ON' : '한국어'; if (cur > -1 && sheet.classList.contains('show')) show(cur); }
+kb.addEventListener('click', function () { koOn = !koOn; try { localStorage.setItem('pm_sw_ko', koOn ? '1' : '0'); } catch (e) {} applyKo(); });
+// 구역 버튼
+var REG = [
+  ['푸동 시내 (루자쭈이)', ['陆家嘴', '浦东南路', '世纪大道', '上海科技馆', '浦东大道', '杨高中路']],
+  ['푸동 디즈니·공항', ['龙阳路', '迪士尼', '浦东1号2号航站楼']],
+  ['푸서 시내 (난징둥루·난징시루·쉬자후이)', ['南京东路', '南京西路', '徐家汇', '静安寺', '人民广场', '一大会址·新天地']],
+  ['푸서 와이탄', ['南京东路', '豫园', '陆家嘴', '人民广场', '小南门']],
+  ['푸서 훙차오 공항 근처', ['虹桥火车站', '虹桥2号航站楼', '虹桥1号航站楼', '国家会展中心', '上海动物园']]
+];
+var regsEl = document.getElementById('regs');
+function byZh(n) { return D.stations.filter(function (s) { return s.zh === n; })[0]; }
+REG.forEach(function (r, i) {
+  var b = document.createElement('button'); b.className = 'reg'; b.textContent = r[0];
+  b.addEventListener('click', function () {
+    var ss = r[1].map(byZh).filter(Boolean), xs = ss.map(function (s) { return s.x; }), ys = ss.map(function (s) { return s.y; });
+    fit([Math.min.apply(0, xs) - 70, Math.min.apply(0, ys) - 45, Math.max.apply(0, xs) + 70, Math.max.apply(0, ys) + 45]);
+    closeSheet(); [].forEach.call(regsEl.children, function (c) { c.classList.toggle('on', c === b); });
+  });
+  regsEl.appendChild(b);
+});
 // search
 var q = document.getElementById('q'), res = document.getElementById('res');
 q.addEventListener('input', function () {
@@ -179,8 +211,8 @@ q.addEventListener('input', function () {
 });
 window.addEventListener('resize', apply);
 // 시작: 도심
-var topH = document.querySelector('.top').offsetHeight;
-home(); window.__map = { vb: vb, show: show, fit: function () { fit(bounds()); }, home: home, center: center };
+var topH = document.querySelector('.top').offsetHeight; res.style.top = (topH + 4) + 'px';
+applyKo(); home(); window.__map = { vb: vb, show: show, fit: function () { fit(bounds()); }, home: home, center: center };
 })();
 </script>
 </body>
