@@ -264,7 +264,7 @@
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function toast(msg) { var t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast._t); toast._t = setTimeout(function () { t.classList.remove('show'); }, 2600); }
   function stars(n) { n = Math.max(0, Math.min(5, Math.round(n))); return '★'.repeat(n) + '☆'.repeat(5 - n); }
-  function safeUrl(u) { return /^(https:\/\/|img\/)/.test(u || '') ? u : ''; }
+  function safeUrl(u) { return /^(https:\/\/|img\/|subway\.html$)/.test(u || '') ? u : ''; }
   function distanceKm(a, b, c, d) { var R = 6371, r = Math.PI / 180, dLat = (c - a) * r, dLon = (d - b) * r; var x = Math.sin(dLat / 2) ** 2 + Math.cos(a * r) * Math.cos(c * r) * Math.sin(dLon / 2) ** 2; return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x)); }
   function hotelStars(n) { return n > 0 ? '⭐'.repeat(n) : '🏨'; }
 
